@@ -11,11 +11,15 @@ public class VerifySudokuBoard {
     // integer division and modular
     // division subgrid index
     // modular  index inside subgrid
+    // grid scaling, up and down
+
+    // time O(n^2)
+    // space O(n^2) each array of sets contains n hash sets, and each hash sets is capable of growing to a size of n
 
     public static boolean verify(int[][] board) {
 
-        // create hash sets for each row, column, and subgrid to keep track of numbers previously seen on any
-        // given row, column, or subgrid
+        // create hash sets for each row, column, and sub grid to keep track of numbers previously seen on any
+        // given row, column, or sub grid
         @SuppressWarnings("unchecked")
         var rowHashSets = (HashSet<Integer>[]) new HashSet<?>[]{new HashSet<>(), new HashSet<>(), new HashSet<>(),
                 new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()};
@@ -37,6 +41,7 @@ public class VerifySudokuBoard {
                     continue;
                 }
 
+                // check if score has been seen in the current row, column or sub grid
                 if (rowHashSets[row].contains(score)) {
                     return false;
                 }
@@ -51,6 +56,8 @@ public class VerifySudokuBoard {
                     return false;
                 }
 
+                // if we passed the above checks, mark this value as seen by adding
+                // it to its corresponding hash sets
                 rowHashSets[row].add(score);
                 columnHashSets[col].add(score);
                 subGridHashSets[subGridRow][subGridCol].add(score);

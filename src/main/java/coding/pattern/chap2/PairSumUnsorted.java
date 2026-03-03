@@ -26,6 +26,8 @@ public class PairSumUnsorted {
         return new int[]{};
     }
 
+    // time O(n)
+    // space O(n)
     public static int[] onePass(int[] nums, int target) {
         var num_map = new HashMap<Integer, Integer>();
         for (int i = 0; i < nums.length; i++) {
