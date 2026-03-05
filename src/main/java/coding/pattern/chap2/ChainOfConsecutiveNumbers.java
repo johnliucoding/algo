@@ -1,10 +1,35 @@
 package coding.pattern.chap2;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public class ChainOfConsecutiveNumbers {
+
+    private static final Logger log = LoggerFactory.getLogger(ChainOfConsecutiveNumbers.class);
+
+    // O(n*log(n))
+    public static int bruteForce(int[] nums) {
+        if(nums.length == 1) {
+            return 1;
+        }
+        Arrays.sort(nums);
+        log.atInfo().setMessage("sorted nums: {}").addArgument(nums).log();
+        int longest = 0;
+        int current = 0;
+        for (int i = 0; i < nums.length; i++) {
+            current++;
+
+            if (i+1 == nums.length || nums[i] + 1 != nums[i + 1]) {
+                longest = Math.max(current, longest);
+                current = 0;
+            }
+        }
+        return longest;
+    }
 
     // O(n)
     public static int longestChainSize(int[] nums) {
