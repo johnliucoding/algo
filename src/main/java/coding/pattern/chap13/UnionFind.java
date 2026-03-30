@@ -17,7 +17,7 @@ public class UnionFind {
         }
     }
 
-    public void union(int x, int y) {
+    public boolean union(int x, int y) {
         int repX = find(x);
         int repY = find(y);
         if (repX != repY) {
@@ -31,7 +31,10 @@ public class UnionFind {
                 parent[repX] = repY;
                 size[repY] += size[repX];
             }
+            return true;
         }
+        // return false if x, y belong to the same group
+        return false;
     }
 
     public int find(int x) {

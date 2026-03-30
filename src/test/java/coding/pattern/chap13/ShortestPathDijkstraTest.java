@@ -16,6 +16,6 @@ class ShortestPathDijkstraTest {
         var start = 0;
         int[] ints = ShortestPathDijkstra.shortestPath(n, edges, start);
         int[] expected = new int[]{0,4,3,7,8,-1};
-        assertEquals(expected, ints);
+        assertArrayEquals(expected, ints);
     }
 }
