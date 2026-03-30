@@ -1,7 +1,5 @@
 package coding.pattern.chap13;
 
-import java.util.List;
-
 public class CountIslands {
 
 

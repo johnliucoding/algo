@@ -1,7 +1,6 @@
 package coding.pattern.chap13;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BipartiteGraph {
