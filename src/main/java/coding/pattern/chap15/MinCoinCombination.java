@@ -48,6 +48,6 @@ public class MinCoinCombination {
     }
 }
 
-
+// Integer.MAX_VALUE 计算有溢出问题
 //Integer.MAX_VALUE + 1
 //Double.POSITIVE_INFINITY + 1 结果是不一样的
