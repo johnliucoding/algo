@@ -17,5 +17,7 @@ class ClimbingStairTest {
 
 
         assertEquals(5, new ClimbingStair().climbStairsBottomUp(4));
+
+        assertEquals(5, new ClimbingStair().climbStairsBottomUpOptimized(4));
     }
 }

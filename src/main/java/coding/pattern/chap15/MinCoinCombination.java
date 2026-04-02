@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MinCoinCombination {
-
+    static final int INF = 0x3f3f3f3f;
     public static int minCoinCombinationTopDown(int[] coins, int target) {
         int res = topDownDp(coins, target, new HashMap<Integer, Integer>());
-        return res;
+        return res == INF ? -1 : res;
     }
 
     private static int topDownDp(int[] coins, int target, Map<Integer, Integer> memo) {
@@ -18,7 +18,7 @@ public class MinCoinCombination {
         if(memo.containsKey(target)) {
             return memo.get(target);
         }
-        int min_coins =  Integer.MAX_VALUE;
+        int min_coins =  INF;
         for (int coin : coins) {
             // avoid negative targets
             if (target >= coin) {
@@ -33,17 +33,21 @@ public class MinCoinCombination {
     public static int minCoinCombinationBottomUp(int[] coins, int target) {
         int[] dp = new int[target + 1];
         for (int i = 0; i <= target; i++) {
-            dp[i] = Integer.MAX_VALUE;
+            dp[i] = INF;
         }
         dp[0] = 0;
 
-        for (int i = 1; i <= target; i++) {
+        for (int t = 1; t <= target; t++) {
             for (int coin : coins) {
-                if (coin <= i) {
-                    dp[i] = Math.min(dp[i], 1 + dp[i-coin]);
+                if (coin <= t) {
+                    dp[t] = Math.min(dp[t], 1 + dp[t-coin]);
                 }
             }
         }
-        return dp[target] != Integer.MAX_VALUE ? dp[target] : -1;
+        return dp[target] != INF ? dp[target] : -1;
     }
 }
+
+
+//Integer.MAX_VALUE + 1
+//Double.POSITIVE_INFINITY + 1 结果是不一样的
