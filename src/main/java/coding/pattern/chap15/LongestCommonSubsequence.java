@@ -41,13 +41,14 @@ public class LongestCommonSubsequence {
         int n = s2.length();
         // initializing pre row as the DP values of the last row
         int[] previous = new int[n+1];
-        // set the last cell of cur row to 0 to set the base case for this row
-        // this is done by initializing the entire row to 0
-        int[] current = new int[n+1];
+
 
 
 
         for (int i = m-1; i >=0; i--) {
+            // set the last cell of cur row to 0 to set the base case for this row
+            // this is done by initializing the entire row to 0
+            int[] current = new int[n+1];
             for (int j = n-1; j >=0; j--) {
                 // if the characters match, the length of the LCS at
                 // 'current[j]' is 1 + the LCS length of the remaining substrings

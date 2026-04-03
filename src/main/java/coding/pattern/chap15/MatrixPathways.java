@@ -32,12 +32,14 @@ public class MatrixPathways {
         int[] previous_row =  new int[n];
         Arrays.fill(previous_row, 1);
 
-        // set the first cell of 'cur_row' to 1.
-        // this is done by setting the entire row to 1
-        int[] cur_row =  new int[n];
-        Arrays.fill(cur_row, 1);
+
 
         for (int r = 1; r < m; r++) {
+            // set the first cell of 'cur_row' to 1.
+            // this is done by setting the entire row to 1
+            int[] cur_row =  new int[n];
+            Arrays.fill(cur_row, 1);
+
             // the number of unique paths to the current cell is the sum of
             // the paths from the cell above it 'previous_row[c]' and the cell to the left 'cur_row[c-1]'
             for (int c = 1; c < n; c++) {
