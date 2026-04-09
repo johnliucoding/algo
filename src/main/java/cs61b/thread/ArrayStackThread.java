@@ -1,4 +1,4 @@
-package modern.thread;
+package cs61b.thread;
 
 
 public class ArrayStackThread implements Stack {

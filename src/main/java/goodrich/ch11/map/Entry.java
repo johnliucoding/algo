@@ -1,4 +1,4 @@
-package ch11.map;
+package goodrich.ch11.map;
 
 /**
  * Interface for a key-value pair.

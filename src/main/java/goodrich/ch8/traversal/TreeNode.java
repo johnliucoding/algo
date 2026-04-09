@@ -1,4 +1,4 @@
-package ch8.traversal;
+package goodrich.ch8.traversal;
 
 /**
  * @author Liu Xiaodong

@@ -1,4 +1,4 @@
-package ch11.treemap;
+package goodrich.ch11.treemap;
 
 import ch11.map.Entry;
 import ch11.map.Map;

@@ -1,4 +1,4 @@
-package ch11.tree;
+package goodrich.ch11.tree;
 
 /**
  * @author Liu Xiaodong

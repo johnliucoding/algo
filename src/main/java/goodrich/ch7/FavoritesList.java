@@ -1,4 +1,4 @@
-package ch7;
+package goodrich.ch7;
 
 import java.util.Iterator;
 import java.util.LinkedList;

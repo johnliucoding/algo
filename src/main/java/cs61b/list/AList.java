@@ -1,4 +1,4 @@
-package modern.list;
+package cs61b.list;
 
 import java.util.Arrays;
 

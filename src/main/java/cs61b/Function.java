@@ -1,4 +1,4 @@
-package modern;
+package cs61b;
 
 public class Function {
     public static int larger(int x, int y) {

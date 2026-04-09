@@ -1,4 +1,4 @@
-package chap2;
+package algo4.chap2;
 
 import java.util.*;
 

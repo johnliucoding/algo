@@ -1,4 +1,4 @@
-package ch3.arr;
+package goodrich.ch3.arr;
 
 import java.util.Arrays;
 import java.util.Random;

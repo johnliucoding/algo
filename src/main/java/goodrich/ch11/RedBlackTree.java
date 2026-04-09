@@ -1,4 +1,4 @@
-package ch11;
+package goodrich.ch11;
 
 /**
  * @author Liu Xiaodong

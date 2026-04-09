@@ -1,4 +1,4 @@
-package ch10;
+package goodrich.ch10;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

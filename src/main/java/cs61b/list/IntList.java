@@ -1,4 +1,4 @@
-package modern.list;
+package cs61b.list;
 
 // singly linked list
 public class IntList {

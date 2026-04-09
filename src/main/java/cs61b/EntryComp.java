@@ -1,4 +1,4 @@
-package modern;
+package cs61b;
 
 import com.google.common.collect.Multiset.Entry;
 import com.google.common.primitives.Ints;

@@ -1,4 +1,4 @@
-package ch6;
+package goodrich.ch6;
 
 /**
  * capacity-less stack

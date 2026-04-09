@@ -1,4 +1,4 @@
-package modern;
+package cs61b;
 
 public class TestPrivate {
 

@@ -1,4 +1,4 @@
-package ch3;
+package goodrich.ch3;
 
 import lombok.Getter;
 import lombok.Setter;

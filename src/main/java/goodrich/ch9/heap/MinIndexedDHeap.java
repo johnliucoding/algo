@@ -1,4 +1,4 @@
-package ch9.heap;
+package goodrich.ch9.heap;
 
 /**
  * @author Liu Xiaodong

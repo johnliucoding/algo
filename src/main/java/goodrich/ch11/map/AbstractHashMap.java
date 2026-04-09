@@ -1,4 +1,4 @@
-package ch11.map;
+package goodrich.ch11.map;
 
 import java.util.ArrayList;
 import java.util.Random;

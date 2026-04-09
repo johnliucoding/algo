@@ -1,4 +1,4 @@
-package ch13;
+package goodrich.ch13;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

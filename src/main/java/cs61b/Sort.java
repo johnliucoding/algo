@@ -1,4 +1,4 @@
-package modern;
+package cs61b;
 // 1 write tests to evaluate code correctness: verifies correctness
 //   and refactor without regression
 

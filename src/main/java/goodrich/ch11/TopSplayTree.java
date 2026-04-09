@@ -1,4 +1,4 @@
-package ch11;
+package goodrich.ch11;
 
 // void insert(x) Insert x
 // void remove(x) Remove x

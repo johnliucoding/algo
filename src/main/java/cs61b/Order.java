@@ -1,4 +1,4 @@
-package modern;
+package cs61b;
 
 import java.util.HashMap;
 import java.util.Map;

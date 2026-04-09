@@ -1,4 +1,4 @@
-package ch3.arr;
+package goodrich.ch3.arr;
 
 public class InsertionSort {
 
