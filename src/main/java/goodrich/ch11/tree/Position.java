@@ -1,0 +1,25 @@
+package ch11.tree;
+
+/**
+ * @author Liu Xiaodong
+ * @since 2024/10/9 10:38 AM
+ */
+
+/**
+ * An interface for a position which is an abstraction for the
+ * location at which a single element is stored in a positional
+ * container.
+ *
+ * @author Michael T. Goodrich
+ * @author Roberto Tamassia
+ * @author Michael H. Goldwasser
+ */
+public interface Position<E> {
+    /**
+     * Returns the element stored at this position.
+     *
+     * @return the stored element
+     * @throws IllegalStateException if position no longer valid
+     */
+    E getElement() throws IllegalStateException;
+}
