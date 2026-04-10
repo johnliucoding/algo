@@ -1,6 +1,6 @@
 package goodrich.ch6;
 
-import ch3.CircularlyLinkedList;
+import goodrich.ch3.CircularlyLinkedList;
 
 /**
  * @author Liu Xiaodong

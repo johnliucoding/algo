@@ -1,17 +1,16 @@
 package goodrich.ch3;
 
-import lombok.Getter;
-import lombok.Setter;
+
 
 public class DoublyLinkedList<E> {
 
-  @Getter
+
   private static class Node<E> {
-    private final E element;
-    @Setter
-    private Node<E> prev;
-    @Setter
-    private Node<E> next;
+    public final E element;
+
+    public Node<E> prev;
+
+    public Node<E> next;
 
     public Node(E e, Node<E> p, Node<E> n) {
       this.element = e;
@@ -27,7 +26,7 @@ public class DoublyLinkedList<E> {
   public DoublyLinkedList() {
     this.header = new Node<>(null, null, null);
     this.trailer = new Node<>(null, header, null);
-    this.header.setNext(this.trailer);
+    this.header.next = this.trailer;
   }
 
   public int size() {
@@ -41,48 +40,48 @@ public class DoublyLinkedList<E> {
   public E getFirst() {
     if (isEmpty())
       return null;
-    return header.getNext().getElement();
+    return header.next.element;
   }
 
   public E getLast() {
     if (isEmpty())
       return null;
-    return trailer.getPrev().getElement();
+    return trailer.prev.element;
   }
 
   private void addBetween(E e, Node<E> predecessor, Node<E> successor) {
     var newest = new Node<>(e, predecessor, successor);
-    predecessor.setNext(newest);
-    successor.setPrev(newest);
+    predecessor.next = newest;
+    successor.prev = newest;
     size++;
   }
 
   private E remove(Node<E> node) {
-    var predecessor = node.getPrev();
-    var successor = node.getNext();
-    predecessor.setNext(successor);
-    successor.setPrev(predecessor);
+    var predecessor = node.prev;
+    var successor = node.next;
+    predecessor.next = successor;
+    successor.prev = predecessor;
     size--;
-    return node.getElement();
+    return node.element;
   }
 
   public void addFront(E e) {
-    addBetween(e, header, header.getNext());
+    addBetween(e, header, header.next);
   }
 
   public void addEnd(E e) {
-    addBetween(e, trailer.getPrev(), trailer);
+    addBetween(e, trailer.prev, trailer);
   }
 
   public E removeFront() {
     if (isEmpty())
       return null;
-    return remove(header.getNext());
+    return remove(header.next);
   }
 
   public E removeEnd() {
     if (isEmpty())
       return null;
-    return remove(trailer.getPrev());
+    return remove(trailer.prev);
   }
 }

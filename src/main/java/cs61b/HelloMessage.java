@@ -1,36 +1,34 @@
 package cs61b;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Objects;
 
 public class HelloMessage {
 
-    private String message;
-    private String subject;
+    private static final Logger log = LoggerFactory.getLogger(HelloMessage.class);
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        HelloMessage that = (HelloMessage) o;
-//        return Objects.equals(message, that.message) && Objects.equals(subject, that.subject);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(message, subject);
-//    }
-
+    public String message;
+    public String subject;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HelloMessage that = (HelloMessage) o;
-        return message.equals(that.message) && subject.equals(that.subject);
+        if (!(o instanceof HelloMessage that)) return false;
+        return Objects.equals(message, that.message) && Objects.equals(subject, that.subject);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(message, subject);
+    }
+
+
+    @Override
+    public String toString() {
+        return "HelloMessage{" +
+                "message='" + message + '\'' +
+                ", subject='" + subject + '\'' +
+                '}';
     }
 }

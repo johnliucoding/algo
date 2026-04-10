@@ -5,8 +5,8 @@ package goodrich.ch11.tree;
  * @since 2024/10/9 10:39 AM
  */
 
-import ch6.LinkedQueue;
-import ch6.Queue;
+import goodrich.ch6.LinkedQueue;
+import goodrich.ch6.Queue;
 
 import java.util.ArrayList;
 import java.util.Iterator;

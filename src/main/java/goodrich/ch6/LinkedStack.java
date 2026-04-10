@@ -1,6 +1,6 @@
 package goodrich.ch6;
 
-import ch3.SinglyLinkedList;
+import goodrich.ch3.SinglyLinkedList;
 
 /**
  * @author Liu Xiaodong

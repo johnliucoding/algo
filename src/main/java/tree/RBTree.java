@@ -1,6 +1,6 @@
 package tree;
 
-import lombok.Getter;
+
 
 /**
  * balanced binary search tree using red black tree
@@ -10,8 +10,8 @@ import lombok.Getter;
 public class RBTree {
 
     public static class Node {
-        @Getter
-        int data;
+
+        public int data;
         Node left;
         Node right;
         Node parent;

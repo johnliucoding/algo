@@ -1,7 +1,5 @@
 package goodrich.ch8;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
             throw new IllegalArgumentException("Not valid position type");
         }
         // intentionally sets the parent field of a deleted node to refer to itself, in accordance with our conventional representation of a defunct node
-        if (node.getParent() == node) {
+        if (node.parent == node) {
             throw new IllegalArgumentException("p is no longer in the tree");
         }
         return node;
@@ -38,7 +36,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
     @Override
     public Position<E> left(Position<E> p) throws IllegalArgumentException {
         final Node<E> node = validate(p);
-        return node.getLeft();
+        return node.left;
     }
 
 
@@ -47,7 +45,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
     @Override
     public Position<E> right(Position<E> p) throws IllegalArgumentException {
         final Node<E> node = validate(p);
-        return node.getRight();
+        return node.right;
     }
 
     @Override
@@ -58,7 +56,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
     @Override
     public Position<E> parent(Position<E> p) throws IllegalArgumentException {
         final Node<E> node = validate(p);
-        return node.getParent();
+        return node.parent;
     }
 
     @Override
@@ -86,11 +84,11 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
      */
     public Position<E> addLeft(Position<E> p, E e) throws IllegalStateException, IllegalArgumentException {
         final Node<E> parent = validate(p);
-        if (parent.getLeft() != null) {
+        if (parent.left != null) {
             throw new IllegalStateException("p already has a left node");
         }
         final Node<E> child = creatNode(e, parent, null, null);
-        parent.setLeft(child);
+        parent.left = child;
         size++;
         return child;
     }
@@ -100,11 +98,11 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
      */
     public Position<E> addRight(Position<E> p, E e) throws IllegalStateException, IllegalArgumentException {
         final Node<E> parent = validate(p);
-        if (parent.getRight() != null) {
+        if (parent.right != null) {
             throw new IllegalStateException("p already has a right node");
         }
         final Node<E> child = creatNode(e, parent, null, null);
-        parent.setRight(child);
+        parent.right = child;
         size++;
         return child;
     }
@@ -115,7 +113,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
     public E set(Position<E> p, E e) throws IllegalArgumentException {
         final Node<E> node = validate(p);
         final E tmp = node.getElement();
-        node.setElement(e);
+        node.element = e;
         return tmp;
     }
 
@@ -128,14 +126,14 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
         }
         size += t1.size() + t2.size();
         if (!t1.isEmpty()) {
-            t1.root.setParent(node);
-            node.setLeft(t1.root);
+            t1.root.parent = node;
+            node.left = t1.root;
             t1.root = null;
             t1.size = 0;
         }
         if (!t2.isEmpty()) {
-            t2.root.setParent(node);
-            node.setRight(t2.root);
+            t2.root.parent = node;
+            node.right = t2.root;
             t2.root = null;
             t2.size = 0;
         }
@@ -146,27 +144,27 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
         if (numChildren(p) == 2) {
             throw new IllegalArgumentException("p has two children");
         }
-        final Node<E> child = node.getLeft() != null ? node.getLeft() : node.getRight();
+        final Node<E> child = node.left != null ? node.left : node.right;
         if (child != null) {
-            child.setParent(node.getParent());
+            child.parent = node.parent;
         }
         if (node == root) {
             root = child;
         } else {
-            final Node<E> parent = node.getParent();
-            if (node == parent.getLeft()) {
-                parent.setLeft(child);
+            final Node<E> parent = node.parent;
+            if (node == parent.left) {
+                parent.left = child;
             } else {
-                parent.setRight(child);
+                parent.right = child;
             }
         }
         size--;
         final E temp = node.getElement();
-        node.setElement(null);
-        node.setLeft(null);
-        node.setRight(null);
+        node.element = null;
+        node.left = null;
+        node.right = null;
         //
-        node.setParent(node);
+        node.parent = node;
         return temp;
     }
 
@@ -248,14 +246,26 @@ public class LinkedBinaryTree<E> implements BinaryTree<E> {
         return snapshot;
     }
 
-    @Data
-    @AllArgsConstructor
-    static class Node<E> implements Position<E> {
-        private E element;
-        private Node<E> parent;
-        private Node<E> left;
-        private Node<E> right;
 
+    static class Node<E> implements Position<E> {
+        public E element;
+        public Node<E> parent;
+        public Node<E> left;
+        public Node<E> right;
+
+
+        public Node(E element, Node<E> parent, Node<E> left, Node<E> right) {
+            this.element = element;
+            this.parent = parent;
+            this.left = left;
+            this.right = right;
+        }
+
+
+        @Override
+        public E getElement() throws IllegalStateException {
+            return null;
+        }
     }
 
     private class ElementIterator implements Iterator<E> {

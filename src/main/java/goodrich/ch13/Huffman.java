@@ -1,8 +1,6 @@
 package goodrich.ch13;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +12,15 @@ import java.util.PriorityQueue;
  */
 public class Huffman {
 
-    @Getter
-    @RequiredArgsConstructor
+
     static class Node implements Comparable<Node> {
-        private final int frequency;
-        private Node left;
-        private Node right;
+        public final int frequency;
+        public Node left;
+        public Node right;
+
+        public Node(int frequency) {
+            this.frequency = frequency;
+        }
 
         public Node(Node leftNode, Node rightNode) {
             this.frequency = leftNode.frequency + rightNode.frequency;
@@ -33,10 +34,8 @@ public class Huffman {
         }
     }
 
-    @Getter
-    @EqualsAndHashCode(callSuper = true)
     static class Leaf extends Node {
-        private final char character;
+        public final char character;
 
         public Leaf(char character, int frequency) {
             super(frequency);
@@ -76,11 +75,11 @@ public class Huffman {
 
     private void generateHuffmanCodes(Node node, String code) {
         if (node instanceof Leaf leaf) {
-            huffmanCodes.put(leaf.getCharacter(), code);
+            huffmanCodes.put(leaf.character, code);
             return;
         }
-        generateHuffmanCodes(node.getLeft(), code.concat("0"));
-        generateHuffmanCodes(node.getRight(), code.concat("1"));
+        generateHuffmanCodes(node.left, code.concat("0"));
+        generateHuffmanCodes(node.right, code.concat("1"));
     }
 
     private String getEncodedText() {
@@ -95,9 +94,9 @@ public class Huffman {
         final StringBuilder sb = new StringBuilder();
         Node cur = root;
         for (char c : encodedText.toCharArray()) {
-            cur = c == '0' ? cur.getLeft() : cur.getRight();
+            cur = c == '0' ? cur.left : cur.right;
             if(cur instanceof Leaf l) {
-                sb.append(l.getCharacter());
+                sb.append(l.character);
                 cur = root;
             }
         }

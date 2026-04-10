@@ -5,8 +5,8 @@ package goodrich.ch11.treemap;
  * @since 2024/10/9 11:10 AM
  */
 
-import ch11.map.Entry;
-import ch11.tree.Position;
+import goodrich.ch11.map.Entry;
+import goodrich.ch11.tree.Position;
 
 import java.util.Comparator;
 

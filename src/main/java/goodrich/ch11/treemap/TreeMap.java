@@ -1,7 +1,7 @@
 package goodrich.ch11.treemap;
 
-import ch11.map.Entry;
-import ch11.tree.Position;
+import goodrich.ch11.map.Entry;
+import goodrich.ch11.tree.Position;
 
 import java.util.ArrayList;
 import java.util.Comparator;

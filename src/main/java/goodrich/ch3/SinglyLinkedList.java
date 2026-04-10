@@ -1,16 +1,15 @@
 package goodrich.ch3;
 
-import lombok.Getter;
-import lombok.Setter;
+
 
 
 public class SinglyLinkedList<E> {
 
-  @Getter
+
   private static class Node<E> {
-    private final E element;
-    @Setter
-    private Node<E> next;
+    public final E element;
+
+    public Node<E> next;
 
     public Node(E e, Node<E> n) {
       this.element = e;
@@ -36,13 +35,13 @@ public class SinglyLinkedList<E> {
   public E getFirst() {
     if (isEmpty())
       return null;
-    return head.getElement();
+    return head.element;
   }
 
   public E getLast() {
     if (isEmpty())
       return null;
-    return tail.getElement();
+    return tail.element;
   }
 
   public void addFront(E e) {
@@ -58,7 +57,7 @@ public class SinglyLinkedList<E> {
     if (isEmpty()) {
       this.head = newest;
     } else {
-      tail.setNext(newest);
+      tail.next = newest;
     }
     this.tail = newest;
     this.size++;
@@ -67,8 +66,8 @@ public class SinglyLinkedList<E> {
   public E removeFront() {
     if (isEmpty())
       return null;
-    var ans = this.head.getElement();
-    this.head = head.getNext();
+    var ans = this.head.element;
+    this.head = head.next;
     this.size--;
     if (size == 0) {
       tail = null;

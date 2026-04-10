@@ -1,7 +1,7 @@
 package goodrich.ch11.treemap;
 
-import ch11.map.Entry;
-import ch11.map.Map;
+import goodrich.ch11.map.Entry;
+import goodrich.ch11.map.Map;
 
 /**
  * A map with additional support for keys from a total ordering.
