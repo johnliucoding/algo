@@ -1,8 +1,8 @@
-package basic;
+package sort.maintain.sortedArray;
 
 public class ScoreBoard {
-    private int numOfEntries = 0;
-    private GameEntry[] entries;
+    private int size = 0;
+    private final GameEntry[] entries;
 
     public ScoreBoard(int capacity) {
         entries = new GameEntry[capacity];
@@ -16,13 +16,13 @@ public class ScoreBoard {
 
     public void add(GameEntry e) {
         var newScore = e.score();
-        if(numOfEntries < entries.length || newScore > entries[numOfEntries-1].score()) {
+        if(size < entries.length || newScore > entries[size -1].score()) {
             // no score drops from the board so overall number increases
-            if(numOfEntries < entries.length) {
-                numOfEntries++;
+            if(size < entries.length) {
+                size++;
             }
             // shift any lower scores rightward to make room for the new entry
-            var j = numOfEntries - 1;
+            var j = size - 1;
             while(j > 0 && entries[j-1].score() < newScore) {
                 entries[j] = entries[j-1]; // shift entry from j-1 to j
                 j--;                       // and decrement j
@@ -34,17 +34,17 @@ public class ScoreBoard {
     }
 
     public GameEntry remove(int i) throws IndexOutOfBoundsException {
-        if(i < 0 || i > numOfEntries) {
+        if(i < 0 || i > size) {
             throw new IndexOutOfBoundsException("Invalid index: " + i);
         }
         var temp = entries[i];
         var j = i;
-        while(j < numOfEntries -1) {
+        while(j < size -1) {
             entries[j] = entries[j+1];
             j++;
         }
-        entries[numOfEntries-1] = null;
-        numOfEntries--;
+        entries[size -1] = null;
+        size--;
         return temp;
     }
 }
