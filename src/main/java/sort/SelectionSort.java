@@ -2,7 +2,7 @@ package sort;
 
 public class SelectionSort {
 
-    public static <T extends Comparable<T>> void selectionSort(T[] arr) {
+    public static <T extends Comparable<? super T>> void selectionSort(T[] arr) {
         // swapping smallest to the front
         for (int i = 0; i < arr.length; i++) {
             // find smallest

@@ -14,6 +14,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class SortTest {
 
     private static final Logger log = LoggerFactory.getLogger(SortTest.class);
+    @Test
+    void bubbleSort() {
+        sortTestHelper(BubbleSort::bubbleSort);
+    }
 
     @Test
     void insertionSort() {
@@ -21,11 +25,17 @@ class SortTest {
     }
 
     @Test
+    void shellSort() {
+        sortTestHelper(InsertionSort::shellSort);
+    }
+
+
+    @Test
     void selectionSort() {
         sortTestHelper(SelectionSort::selectionSort);
     }
 
-    private void sortTestHelper(Consumer<Character[]> testMethod) {
+    private  void sortTestHelper(Consumer<Character[]> testMethod) {
         var data = new Character[] {'r', 'a', 'c', 'b'};
         log.atInfo().setMessage("input: {}").addArgument(data).log();
         testMethod.accept(data);
