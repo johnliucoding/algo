@@ -3,7 +3,7 @@ package coding.pattern.chap17;
 import coding.pattern.chap3.ListNode;
 
 
-public class SortList {
+public class ListSort {
 
     public static <T extends Comparable<T>> ListNode<T> sort(ListNode<T> head){
         if(head == null ||  head.next == null) return head;

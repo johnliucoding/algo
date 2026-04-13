@@ -5,18 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+class ListSortTest {
 
-class SortListTest {
-
-    private static final Logger log = LoggerFactory.getLogger(SortListTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ListSortTest.class);
 
     @Test
     void sort() {
         ListNode<Integer> input = buildList();
         log.atInfo().setMessage("input: {}").addArgument(listToString(input)).log();
 
-        ListNode<Integer> result = SortList.sort(input);
+        ListNode<Integer> result = ListSort.sort(input);
         log.atInfo().setMessage("result: {}").addArgument(listToString(result)).log();
     }
 
