@@ -2,14 +2,8 @@ package sort;
 
 
 
-public class InsertionSort {
-    // considering one element at a time,
-    // placing the element in the correct order relative to those before it
-    // maintaining the sorted front part
-
+public class InsertionAndShellSort {
     // aka. insertion in a sorted array
-
-
 
     public static <T extends Comparable<? super T>> void insertionSort(T[] data) {
         // position 0  as already sorted

@@ -1,27 +1,21 @@
-package sort;
-
-import java.util.ArrayList;
-import java.util.List;
+package sort.nonComparable;
 
 /**
  * @author Liu Xiaodong
- * @since 2025/1/10 5:57 PM
+ * @since 2025/1/11 3:34 PM
  */
-public class RadixSortWithDynamicLists {
-
+public class RecursiveMsdRadixSortWithArray {
     public void sort(int[] elements) {
         int max = getMax(elements);
         int numberOfDigits = getNumberOfDigits(max);
 
-        for (int digitIndex = 0; digitIndex < numberOfDigits; digitIndex++) {
-            sortByDigit(elements, digitIndex);
-        }
+        sortByDigit(elements, numberOfDigits-1);
     }
 
     private int getMax(int[] elements) {
         int max = 0;
         for (int element : elements) {
-            if(element > max) {
+            if (element > max) {
                 max = element;
             }
         }
@@ -37,15 +31,33 @@ public class RadixSortWithDynamicLists {
         return numberOfDigits;
     }
 
+    private int[] countDigits(int[] elements, int divisor) {
+        int[] counts = new int[10];
+        for (int element : elements) {
+            int digit = element / divisor % 10;
+            counts[digit]++;
+        }
+        return counts;
+
+    }
+
     private void sortByDigit(int[] elements, int digitIndex) {
-
-        Bucket[] buckets = createBuckets();
         int divisor = calculateDivisor(digitIndex);
+        final int[] counts = countDigits(elements, divisor);
 
+        Bucket[] buckets = createBuckets(counts);
         // 根据基数分配到每个bucket
         for (int element : elements) {
             int digit = element / divisor % 10;
             buckets[digit].add(element);
+        }
+
+        if(digitIndex > 0) {
+            for (Bucket bucket : buckets) {
+                if(bucket.needsToBeSorted()) {
+                    sortByDigit(bucket.elements(), digitIndex-1);
+                }
+            }
         }
 
         // 将bucket内容回填回原数组
@@ -58,10 +70,10 @@ public class RadixSortWithDynamicLists {
         }
     }
 
-    private Bucket[] createBuckets() {
+    private Bucket[] createBuckets(int[] counts) {
         Bucket[] buckets = new Bucket[10];
-        for(int i = 0; i < 10; i++) {
-            buckets[i] = new Bucket();
+        for (int i = 0; i < 10; i++) {
+            buckets[i] = new Bucket(counts[i]);
         }
         return buckets;
     }
@@ -75,13 +87,24 @@ public class RadixSortWithDynamicLists {
     }
 
     static class Bucket {
-        private final List<Integer> elements = new ArrayList<>();
 
-        private void add(int element) {
-            elements.add(element);
+        private final int[] elements;
+        private int addIndex;
+
+        public Bucket(int size) {
+            elements = new int[size];
         }
 
-        private List<Integer> elements() {
+        private boolean needsToBeSorted() {
+            return elements.length > 0;
+        }
+
+        private void add(int element) {
+            elements[addIndex] = element;
+            addIndex++;
+        }
+
+        private int[] elements() {
             return elements;
         }
     }

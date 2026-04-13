@@ -1,15 +1,18 @@
-package sort;
+package sort.nonComparable;
 
 /**
  * @author Liu Xiaodong
- * @since 2025/1/11 3:34 PM
+ * @since 2025/1/11 1:54 PM
  */
-public class RecursiveMsdRadixSortWithArray {
+public class RadixSortWithArray {
+
     public void sort(int[] elements) {
         int max = getMax(elements);
         int numberOfDigits = getNumberOfDigits(max);
 
-        sortByDigit(elements, numberOfDigits-1);
+        for (int digitIndex = 0; digitIndex < numberOfDigits; digitIndex++) {
+            sortByDigit(elements, digitIndex);
+        }
     }
 
     private int getMax(int[] elements) {
@@ -44,20 +47,13 @@ public class RecursiveMsdRadixSortWithArray {
     private void sortByDigit(int[] elements, int digitIndex) {
         int divisor = calculateDivisor(digitIndex);
         final int[] counts = countDigits(elements, divisor);
-
         Bucket[] buckets = createBuckets(counts);
+
+
         // 根据基数分配到每个bucket
         for (int element : elements) {
             int digit = element / divisor % 10;
             buckets[digit].add(element);
-        }
-
-        if(digitIndex > 0) {
-            for (Bucket bucket : buckets) {
-                if(bucket.needsToBeSorted()) {
-                    sortByDigit(bucket.elements(), digitIndex-1);
-                }
-            }
         }
 
         // 将bucket内容回填回原数组
@@ -93,10 +89,6 @@ public class RecursiveMsdRadixSortWithArray {
 
         public Bucket(int size) {
             elements = new int[size];
-        }
-
-        private boolean needsToBeSorted() {
-            return elements.length > 0;
         }
 
         private void add(int element) {

@@ -1,10 +1,13 @@
-package sort;
+package sort.nonComparable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Liu Xiaodong
- * @since 2025/1/11 1:54 PM
+ * @since 2025/1/10 5:57 PM
  */
-public class RadixSortWithArray {
+public class RadixSortWithDynamicLists {
 
     public void sort(int[] elements) {
         int max = getMax(elements);
@@ -18,7 +21,7 @@ public class RadixSortWithArray {
     private int getMax(int[] elements) {
         int max = 0;
         for (int element : elements) {
-            if (element > max) {
+            if(element > max) {
                 max = element;
             }
         }
@@ -34,21 +37,10 @@ public class RadixSortWithArray {
         return numberOfDigits;
     }
 
-    private int[] countDigits(int[] elements, int divisor) {
-        int[] counts = new int[10];
-        for (int element : elements) {
-            int digit = element / divisor % 10;
-            counts[digit]++;
-        }
-        return counts;
-
-    }
-
     private void sortByDigit(int[] elements, int digitIndex) {
-        int divisor = calculateDivisor(digitIndex);
-        final int[] counts = countDigits(elements, divisor);
-        Bucket[] buckets = createBuckets(counts);
 
+        Bucket[] buckets = createBuckets();
+        int divisor = calculateDivisor(digitIndex);
 
         // 根据基数分配到每个bucket
         for (int element : elements) {
@@ -66,10 +58,10 @@ public class RadixSortWithArray {
         }
     }
 
-    private Bucket[] createBuckets(int[] counts) {
+    private Bucket[] createBuckets() {
         Bucket[] buckets = new Bucket[10];
-        for (int i = 0; i < 10; i++) {
-            buckets[i] = new Bucket(counts[i]);
+        for(int i = 0; i < 10; i++) {
+            buckets[i] = new Bucket();
         }
         return buckets;
     }
@@ -83,20 +75,13 @@ public class RadixSortWithArray {
     }
 
     static class Bucket {
-
-        private final int[] elements;
-        private int addIndex;
-
-        public Bucket(int size) {
-            elements = new int[size];
-        }
+        private final List<Integer> elements = new ArrayList<>();
 
         private void add(int element) {
-            elements[addIndex] = element;
-            addIndex++;
+            elements.add(element);
         }
 
-        private int[] elements() {
+        private List<Integer> elements() {
             return elements;
         }
     }

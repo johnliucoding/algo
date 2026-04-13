@@ -1,14 +1,11 @@
-package sort;
+package sort.nonComparable;
 
 /**
  * @author Liu Xiaodong
- * @since 2025/1/11 3:47 PM
+ * @since 2025/1/11 2:02 PM
  */
-public class RadixSortOtherBase {
-    private final int base;
-    public RadixSortOtherBase(int base) {
-        this.base = base;
-    }
+public class RadixSortWithCount {
+
     public void sort(int[] elements) {
         int max = getMax(elements);
         int numberOfDigits = getNumberOfDigits(max);
@@ -34,8 +31,8 @@ public class RadixSortOtherBase {
     }
     private int getNumberOfDigits(int number) {
         int numberOfDigits = 1;
-        while (number >= base) {
-            number /= base;
+        while (number >= 10) {
+            number /= 10;
             numberOfDigits++;
         }
         return numberOfDigits;
@@ -43,15 +40,15 @@ public class RadixSortOtherBase {
     private int calculateDivisor(int digitIndex) {
         int divisor = 1;
         for (int i = 0; i < digitIndex; i++) {
-            divisor *= base;
+            divisor *= 10;
         }
         return divisor;
     }
 
     private int[] countDigits(int[] elements, int divisor) {
-        int[] counts = new int[base];
+        int[] counts = new int[10];
         for (int element : elements) {
-            int digit = element / divisor % base;
+            int digit = element / divisor % 10;
             counts[digit]++;
         }
         return counts;
@@ -59,9 +56,9 @@ public class RadixSortOtherBase {
     }
 
     private int[] calculatePrefixSum(int[] counts) {
-        int[] prefixSums = new int[base];
+        int[] prefixSums = new int[10];
         prefixSums[0] = counts[0];
-        for (int i = 1; i < base; i++) {
+        for (int i = 1; i < 10; i++) {
             prefixSums[i] = prefixSums[i - 1] + counts[i];
         }
         return prefixSums;
@@ -75,7 +72,7 @@ public class RadixSortOtherBase {
         int[] target = new int[elements.length];
         for (int i = elements.length - 1; i >= 0; i--) {
             int element = elements[i];
-            int digit = element / divisor % base;
+            int digit = element / divisor % 10;
             target[--prefixSums[digit]] = element;
         }
         return target;
