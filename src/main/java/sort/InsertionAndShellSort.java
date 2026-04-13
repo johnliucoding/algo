@@ -12,10 +12,10 @@ public class InsertionAndShellSort {
             // shift to find position for 'current' value
             int j = i;
             while (j > 0 && data[j-1].compareTo(current) > 0) {
-                data[j] = data[j-1];
+                data[j] = data[j-1]; // 将 data[j-1]向右移动一位
                 j--;
             }
-            data[j] = current;
+            data[j] = current;       // 将 current赋值到正确位置
         }
     }
 

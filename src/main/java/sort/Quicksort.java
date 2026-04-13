@@ -20,7 +20,7 @@ public class Quicksort {
         quicksort(arr, pivot + 1, high);
     }
 
-    private static <T extends Comparable<? super T>> void swap(T[] arr, int first, int second) {
+    private static <T> void swap(T[] arr, int first, int second) {
         if (first != second) {
             T temp = arr[first];
             arr[first] = arr[second];
