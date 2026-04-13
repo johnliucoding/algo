@@ -29,18 +29,19 @@ public class Quicksort {
     }
 
     private static <T extends Comparable<? super T>> int partition(T[] arr, int low, int high) {
-        int pivotIndex = (low + high) / 2;
+        int pivotIndex = (low + high) / 2; // !import pivot selection
+        // move pivot to high
         swap(arr, pivotIndex, high);
-        int pivotIndexCounter = low;
-        for (int i = low; i < high; i++) {
-            if(arr[i].compareTo(arr[high]) <= 0 ) {
-                swap(arr, pivotIndexCounter, i);
-                pivotIndexCounter++;
+        int left = low;
+        for (int i = low; i < high; i++) { // 处理pivot左边的元素
+            if(arr[i].compareTo(arr[high]) <= 0 ) { // move all element smaller than pivot to left
+                swap(arr, left, i);
+                left++;
             }
         }
-        swap(arr, pivotIndexCounter, high);
+        swap(arr, left, high);
 
-        return pivotIndexCounter;
+        return left;
     }
 
 

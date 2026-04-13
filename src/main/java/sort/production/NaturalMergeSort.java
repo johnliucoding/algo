@@ -1,8 +1,15 @@
-package sort;
+package sort.production;
 
 /**
  * @author Liu Xiaodong
  * @since 2025/1/13 10:10 PM
+ *
+ * Start       :  3  4  2  1  7  5  8  9  0  6
+ * Select runs : (3  4)(2)(1  7)(5  8  9)(0  6)
+ * Merge       : (2  3  4)(1  5  7  8  9)(0  6)
+ * Merge       : (1  2  3  4  5  7  8  9)(0  6)
+ * Merge       : (0  1  2  3  4  5  6  7  8  9)
+ *
  */
 public record NaturalMergeSort<T extends Comparable<T>>(T[] arr) {
 
@@ -45,9 +52,9 @@ public record NaturalMergeSort<T extends Comparable<T>>(T[] arr) {
             starts[newRunCount] = numElements;
             runCount = newRunCount;
             // Swap "from" and "to" arrays
-            T[] help = from;
+            T[] temp = from;
             from = to;
-            to = help;
+            to = temp;
         }
 
         // If final run is not in "elements", copy it there

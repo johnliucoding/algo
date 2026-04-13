@@ -35,7 +35,8 @@ public class ArraySort {
         T pivot = input[high];
         int left =  low;
 
-        // move all numbers less than the pivot to the left, which consequently positions all numbers
+        // move all numbers less than the pivot to the left,
+        // which consequently positions all numbers
         // greater than or equal to the pivot to the right
         for (int i = low; i < high; i++) {
             if(input[i].compareTo(pivot) < 0) {

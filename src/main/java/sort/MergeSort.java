@@ -8,7 +8,8 @@ package sort;
  */
 public class MergeSort {
 
-    private  static <T extends Comparable<? super T>>  void merge(T[] arr, int left, int mid, int right) {
+    private  static <T extends Comparable<? super T>>
+    void merge(T[] arr, int left, int mid, int right) {
         // 左子数组区间为 [left, mid], 右子数组区间为 [mid+1, right]
         // 创建一个临时数组 tmp ，用于存放合并后的结果
         @SuppressWarnings("unchecked")
@@ -35,7 +36,8 @@ public class MergeSort {
         }
     }
 
-    private  static <T extends Comparable<? super T>>  void mergeSort(T[] arr, int left, int right) {
+    private  static <T extends Comparable<? super T>>
+    void mergeSort(T[] arr, int left, int right) {
         // 终止条件
         if (left >= right)
             return; // 当子数组长度为 1 时终止递归
@@ -46,7 +48,9 @@ public class MergeSort {
         // 合并阶段
         merge(arr, left, mid, right);
     }
-    public static  <T extends Comparable<? super T>> void sort(T[] arr) {
+
+    public static  <T extends Comparable<? super T>>
+    void sort(T[] arr) {
         mergeSort(arr, 0, arr.length - 1);
     }
 

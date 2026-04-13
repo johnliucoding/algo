@@ -1,5 +1,7 @@
 package sort;
 
+import sort.production.DualPivotQuicksort;
+
 import java.util.Arrays;
 
 /**
