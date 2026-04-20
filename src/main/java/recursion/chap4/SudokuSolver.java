@@ -6,10 +6,17 @@ package recursion.chap4;
  */
 public class SudokuSolver {
 
-    public static void main(String[] args) {
-        int[][] grid = { { 5, 3, 0, 0, 7, 0, 0, 0, 0 }, { 6, 0, 0, 1, 9, 5, 0, 0, 0 }, { 0, 9, 8, 0, 0, 0, 0, 6, 0 },
-                { 8, 0, 0, 0, 6, 0, 0, 0, 3 }, { 4, 0, 0, 8, 0, 3, 0, 0, 1 }, { 7, 0, 0, 0, 2, 0, 0, 0, 6 },
-                { 0, 6, 0, 0, 0, 0, 2, 8, 0 }, { 0, 0, 0, 4, 1, 9, 0, 0, 5 }, { 0, 0, 0, 0, 8, 0, 0, 7, 9 } };
+    static void main(String[] args) {
+        int[][] grid = {
+                { 5, 3, 0, 0, 7, 0, 0, 0, 0 },
+                { 6, 0, 0, 1, 9, 5, 0, 0, 0 },
+                { 0, 9, 8, 0, 0, 0, 0, 6, 0 },
+                { 8, 0, 0, 0, 6, 0, 0, 0, 3 },
+                { 4, 0, 0, 8, 0, 3, 0, 0, 1 },
+                { 7, 0, 0, 0, 2, 0, 0, 0, 6 },
+                { 0, 6, 0, 0, 0, 0, 2, 8, 0 },
+                { 0, 0, 0, 4, 1, 9, 0, 0, 5 },
+                { 0, 0, 0, 0, 8, 0, 0, 7, 9 } };
 
         printGrid(grid);
         solve(grid);
@@ -43,7 +50,7 @@ public class SudokuSolver {
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
                 if (grid[y][x] == 0) {
-                    for (int i = 1; i < 10; i++) {
+                    for (int i = 1; i < 10; i++) { // possible decisions
                         if (possible(grid, x, y, i)) {
                             grid[y][x] = i; // make a decision to get a smaller problem
                             
@@ -61,6 +68,7 @@ public class SudokuSolver {
         return true;
     }
 
+    // is `num` can possibly fill position `(x, y)`
     public static boolean possible(int[][] grid, int x, int y, int num) {
         for (int i = 0; i < 9; i++) {
             if (grid[y][i] == num) {

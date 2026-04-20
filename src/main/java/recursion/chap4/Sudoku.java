@@ -2,10 +2,17 @@ package recursion.chap4;
 
 
 public class Sudoku {
-    public static void main(String[] args) {
-        int[][] grid = { { 5, 3, 0, 0, 7, 0, 0, 0, 0 }, { 6, 0, 0, 1, 9, 5, 0, 0, 0 }, { 0, 9, 8, 0, 0, 0, 0, 6, 0 },
-                { 8, 0, 0, 0, 6, 0, 0, 0, 3 }, { 4, 0, 0, 8, 0, 3, 0, 0, 1 }, { 7, 0, 0, 0, 2, 0, 0, 0, 6 },
-                { 0, 6, 0, 0, 0, 0, 2, 8, 0 }, { 0, 0, 0, 4, 1, 9, 0, 0, 5 }, { 0, 0, 0, 0, 8, 0, 0, 7, 9 } };
+    static void main(String[] args) {
+        int[][] grid = {
+                { 5, 3, 0, 0, 7, 0, 0, 0, 0 },
+                { 6, 0, 0, 1, 9, 5, 0, 0, 0 },
+                { 0, 9, 8, 0, 0, 0, 0, 6, 0 },
+                { 8, 0, 0, 0, 6, 0, 0, 0, 3 },
+                { 4, 0, 0, 8, 0, 3, 0, 0, 1 },
+                { 7, 0, 0, 0, 2, 0, 0, 0, 6 },
+                { 0, 6, 0, 0, 0, 0, 2, 8, 0 },
+                { 0, 0, 0, 4, 1, 9, 0, 0, 5 },
+                { 0, 0, 0, 0, 8, 0, 0, 7, 9 } };
 
         // grid[y][x]
         // 9 rows, key y
@@ -62,13 +69,17 @@ public class Sudoku {
                     for (int choice = 1; choice <= 9; choice++) {
                         if (!rows[y][choice] && !cols[x][choice] && !boxes[(y / 3) * 3 + x / 3][choice]) {
 
+                            // make decision, problem space is smaller
                             grid[y][x] = choice;
                             rows[y][choice] = true;
                             cols[x][choice] = true;
                             boxes[(y / 3) * 3 + x / 3][choice] = true;
+
                             if (solve(grid, rows, cols, boxes)) {
                                 return true;
                             }
+
+                            // back track
                             grid[y][x] = 0;
                             rows[y][choice] = false;
                             cols[x][choice] = false;

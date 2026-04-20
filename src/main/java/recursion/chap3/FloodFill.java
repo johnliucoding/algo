@@ -20,6 +20,7 @@ public class FloodFill {
         int width = image[0].length;
 
         printImage(image);
+        // select the start point in side structure
         floodFill(image, height, width, 3, 3, '.', 'o');
         printImage(image);
 
@@ -32,9 +33,9 @@ public class FloodFill {
         }
         image[y][x] = newChar;
         // uncomment to view each step:
-        // printImage(image);
+//         printImage(image);
 
-        // change teh neighboring characters
+        // change the neighboring characters
         if (y + 1 < height && image[y + 1][x] == oldChar) {
             // recursive case
             floodFill(image, height, width, x, y + 1, oldChar, newChar);

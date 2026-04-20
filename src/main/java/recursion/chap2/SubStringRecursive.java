@@ -1,26 +1,25 @@
 package recursion.chap2;
 
 public class SubStringRecursive {
-    public static void main(String[] args) {
-        var index = findSubString("cat", "My cat Zophie", 0);
 
-        System.out.println(index);
+    public static int findSubString(String needle, String haystack) {
+        if(needle.length() > haystack.length()) {
+            return -1;
+        }
+        return findSubString(needle, haystack, 0);
     }
-    public static int findSubString(String needle, String heystack, int i) {
-        if (i >= heystack.length()) {
+    private static int findSubString(String needle, String haystack, int i) {
+        int remainingLength = haystack.length() - i;
+        if(remainingLength < needle.length()) {
             // BASE CASE (Needle not found.)
             return -1;
         }
-
-        if(heystack.substring(i, i+needle.length()).equals(needle)) {
+        if(haystack.startsWith(needle, i)) {
             // BASE CASE (Needle found.)
             return i;
         } else {
             // RECURSIVE CASE
-            return findSubString(needle, heystack,  i + 1);
+            return findSubString(needle, haystack,  i + 1);
         }
-
-
-
     }
 }

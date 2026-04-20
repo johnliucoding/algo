@@ -14,15 +14,17 @@ public class MazeSolver {
     static char start = 'S';
     static char exit = 'E'; 
     static char path = '@';
-    static record Coordinate(int x, int y) {
+    public record Coordinate(int x, int y) {
+
+        @Override
         public String toString() {
             return "(" +this.x() +", " + this.y() + ")";
         }
     }
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    static void main(String[] args) throws IOException, URISyntaxException {
         System.out.println(System.getProperty("user.dir"));
 
-        final URL resource = MazeSolver.class.getResource("/examplemaze.txt");
+        final URL resource = MazeSolver.class.getResource("/recursion/examplemaze.txt");
         final Path of = Path.of(resource.toURI());
         List<String> maze = Files.readAllLines(of);
      
@@ -32,31 +34,26 @@ public class MazeSolver {
 
         printMaze(maze);
 
-        var startPixel = findPixelCoordinate(maze, height, width, start);
-        System.out.println(startPixel);
+        var startPosition = findStart(maze, height, width, start);
+        System.out.println("starting coordinate: " + startPosition);
 
         // char c = getPixelAt(maze, Coordinate.of(2, 2));
         // System.out.println(c);
         // setPixelAt(maze, Coordinate.of(2, 2), 'U');
         // printMaze(maze);
 
-        // when the algorithms backtacks from a dead end to an earlier intersection,
+        // when the algorithms back-track from a dead end to an earlier intersection,
         // it knows which paths it has tried before and can try a different one.
         var visitedPixel = new ArrayList<Coordinate>();
 
-        solve(maze, height, width, startPixel, visitedPixel);
+        solve(maze, height, width, startPosition, visitedPixel);
 
         printMaze(maze);
 
-        // visitedPixel.forEach(coordinate -> {
-        //     setPixelAt(maze, coordinate, 'V');
-        // });
-        // printMaze(maze);
-
-
     }
 
-    public static boolean solve(List<String> maze, int height, int width, Coordinate current, List<Coordinate> visited) {
+    public static boolean solve(List<String> maze, int height, int width,
+                                Coordinate current, List<Coordinate> visited) {
    
         if(getPixelAt(maze, current) == exit) {
             return true; // find the exit, return true.
@@ -66,7 +63,7 @@ public class MazeSolver {
         visited.add(current);
         // printMaze(maze) // uncomment to view each forward step.
 
-        // explore the north neihtboring point:
+        // explore the north neighboring point:
         var northY = current.y() + 1;
         var northPoint = new Coordinate(current.x(), northY);
         if((northY < height) && canVisit(maze, northPoint) && (visited.indexOf(northPoint) == -1)){
@@ -76,7 +73,7 @@ public class MazeSolver {
             }
         }
 
-        // explore the south neihtboring point:
+        // explore the south neighboring point:
         var southY = current.y() - 1;
         var southPoint = new Coordinate(current.x(), southY);
         if ((southY > 0) && canVisit(maze, southPoint) && (visited.indexOf(southPoint) == -1)) {
@@ -86,7 +83,7 @@ public class MazeSolver {
             }
         }
 
-        // explore the west neihtboring point:
+        // explore the west neighboring point:
         var westX = current.x() - 1;
         var westPoint = new Coordinate(westX, current.y());
         if ((westX > 0) && canVisit(maze, westPoint) && (visited.indexOf(westPoint) == -1)) {
@@ -96,7 +93,7 @@ public class MazeSolver {
             }
         }
 
-        // explore the east neihtboring point:
+        // explore the east neighboring point:
         var eastX = current.x() + 1;
         var eastPoint = new Coordinate(eastX, current.y());
         if ((eastX < width) && canVisit(maze, eastPoint) && (visited.indexOf(eastPoint) == -1)) {
@@ -106,8 +103,8 @@ public class MazeSolver {
             }
         }
 
-
-        setPixelAt(maze, current, empty); // reset the empty space. BACKTRACKING
+        // reset the empty space. BACKTRACKING
+        setPixelAt(maze, current, empty);
         // printMaze(maze) // uncomment to view each backtack step.
 
         return false; // BASE CASE
@@ -119,7 +116,7 @@ public class MazeSolver {
     }
 
     public static void printMaze(List<String> maze) {
-        maze.forEach(line -> System.out.println(line));
+        maze.forEach(System.out::println);
     }
 
     public static char getPixelAt(List<String> maze, Coordinate coordinate) {
@@ -127,26 +124,22 @@ public class MazeSolver {
     }
 
     public static void setPixelAt(List<String> maze, Coordinate coordinate, char newChar) {
-
         String row = maze.get(coordinate.y());
-
         var sb = new StringBuilder(row);
         sb.setCharAt(coordinate.x(), newChar);
-
         maze.set(coordinate.y(), sb.toString());
     }
 
-    public static Coordinate findPixelCoordinate(List<String> maze, int height, int width, char c) {
+    public static Coordinate findStart(List<String> maze, int height, int width, char c) {
        for(int h = 0; h < height; h++) {
         String row = maze.get(h);
         for(int w = 0; w < width; w++) {
             char currentChar = row.charAt(w);
             if(currentChar == c) {
-                Coordinate coordinate = new Coordinate(w, h);
-                return coordinate;
+                return new Coordinate(w, h);
             }
         }
        }
-    return null;
+        return null;
     }
 }

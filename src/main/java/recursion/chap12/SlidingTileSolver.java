@@ -10,7 +10,7 @@ import java.util.Random;
 public class SlidingTileSolver {
 
     public static boolean solve(Board board, int maxMoves) {
-        ArrayList<DIRECTION> solutionMoves = new ArrayList<DIRECTION>();
+        ArrayList<DIRECTION> solutionMoves = new ArrayList<>();
         var solved = attemptMove(board, solutionMoves, maxMoves, null);
 
         if(solved) {
@@ -50,21 +50,21 @@ public class SlidingTileSolver {
                 return true;
             }
             board.undoMove(direction);
-            movesMade.remove(movesMade.size() - 1); // remove the last move since it was undone
+            movesMade.removeLast(); // remove the last move since it was undone
         }
         return false;
     }
     
 
-    static enum DIRECTION {UP, DOWN, LEFT, RIGHT}
+    public enum DIRECTION {UP, DOWN, LEFT, RIGHT}
 
-    static class Board {
+    public static class Board {
         static Random random = new Random(2); //
         static int SIZE = 4; // the board is SIZE * SIZE spaces.
         static int blank = 0;
         static int DIFFICULTY = 40; // how many random slides a puzzle starts with.
 
-        private int[] data;
+        private final int[] data;
         public Board() {
             int len = SIZE*SIZE;
 
@@ -185,18 +185,16 @@ public class SlidingTileSolver {
             }
         }
     }
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Board board = new Board();
         board.setUpPuzzle();
 
         board.displayBord();
 
         int maxMoves = 10;
-        while(true) {
-            if(solve(board, maxMoves)) {
-                break;
-            }
+        while (!solve(board, maxMoves)) {
             maxMoves++;
         }
+        System.out.println("used moves: " + maxMoves);
     }
 }

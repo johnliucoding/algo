@@ -14,12 +14,28 @@ public class Hanoi {
     static int[] b = new int[6];
     static int[] c = new int[6];
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         printTowers();
         System.out.println("starting --- ");
         solve(total_disks, a, c, b);
         System.out.println("ending --- ");
         printTowers();
+    }
+
+
+    // leap-of-faith
+    public static void solve(int numOfDisk, int[] start, int[] end, int[] temp ) {
+        if(numOfDisk == 1) {
+            moveOne(start, end);
+            printTowers();
+            return;
+        } else {
+            solve(numOfDisk-1, start, temp, end);
+            moveOne(start, end);
+            printTowers();
+            solve(numOfDisk-1, temp, end, start);
+            return;
+        }
     }
 
     public static void moveOne(int[] from, int[] to) {
@@ -40,22 +56,6 @@ public class Hanoi {
 
     }
 
-    public static void solve(int numOfDisk, int[] start, int[] end, int[] temp ) {
-        if(numOfDisk == 1) {
-            moveOne(start, end);
-            printTowers();
-            return;
-        } else {
-            solve(numOfDisk-1, start, temp, end);
-            moveOne(start, end);
-            printTowers();
-            solve(numOfDisk-1, temp, end, start);
-            return;
-        }
-
-
-        
-    }
 
     public static void printTowers() {
         System.out.println("tower A: " + printTower(a));

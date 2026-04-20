@@ -1,5 +1,7 @@
 package recursion.chap3;
 
+import static recursion.chap3.FloodFill.printImage;
+
 public class FindRoom {
     
     public static void main(String[] args) {
@@ -17,7 +19,7 @@ public class FindRoom {
         int width = image[0].length;
 
         int numOfFill = 0;
-
+//        printImage(image);
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
                 if(image[h][w] == '.'){
@@ -26,7 +28,8 @@ public class FindRoom {
                 }
             }
         }
-
+//        printImage(image);
+        // exclude the outer
         System.out.println(numOfFill-1);
    
 
@@ -39,9 +42,9 @@ public class FindRoom {
         }
         image[y][x] = newChar;
         // uncomment to view each step:
-        // printImage(image);
+//         printImage(image);
 
-        // change teh neighboring characters
+        // change the neighboring characters
         if (y + 1 < height && image[y + 1][x] == oldChar) {
             // recursive case
             floodFill(image, height, width, x, y + 1, oldChar, newChar);
@@ -60,6 +63,5 @@ public class FindRoom {
         }
         // implicit base case
         return;
-
     }
 }

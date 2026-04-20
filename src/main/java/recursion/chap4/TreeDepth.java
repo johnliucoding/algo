@@ -1,7 +1,7 @@
 package recursion.chap4;
 
 public class TreeDepth {
-    static class TreeNode {
+    public static class TreeNode {
         String data;
         TreeNode[] children;
 
@@ -10,7 +10,7 @@ public class TreeDepth {
         }
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         // individual nodes
         var root = new TreeNode("A");
         var node2 = new TreeNode("B");

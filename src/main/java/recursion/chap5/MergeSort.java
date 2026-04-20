@@ -5,26 +5,11 @@ import java.util.StringJoiner;
 
 public class MergeSort {
     
-    public static void main(String[] args) {
+    static void main(String[] args) {
         int[] arr = { 81, 48, 94, 87, 83, 14, 6, 42 };
         int[] sorted = sort(arr, arr.length);
 
         System.out.println(Arrays.toString(sorted));
-    }
-
-    /**
-     * get string representation of certain range of int array
-     * 
-     * @param arr  array to print
-     * @param from start index inclusive
-     * @param to   end index inclusive
-     */
-    public static String ars(int[] arr, int from, int to) { // the range is inclusive
-        StringJoiner joiner = new StringJoiner(", ", "[", "]");
-        for (int i = from; i <= to; i++) {
-            joiner.add(Integer.toString(arr[i]));
-        }
-        return joiner.toString();
     }
 
     public static int[] sort(int[] items, int length) { // the range is inclusive
