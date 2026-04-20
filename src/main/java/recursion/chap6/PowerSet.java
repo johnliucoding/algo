@@ -11,7 +11,7 @@ public class PowerSet {
 
     public static List<String> power(String str) {
 
-        if(str.length() == 0) {
+        if(str.isEmpty()) {
             // BASE CASE empty set
             return List.of(str);
         }

@@ -20,8 +20,10 @@ public class PermutationDup {
 
 
         // System.out.println(permWithoutDup("ABCD", 2, ""));
-
-        permWithoutDupPrint("ABCD", 2, "");
+        List<String> abcd = permWithoutDup("ABCD", 4, "");
+        System.out.println(abcd);
+// [ABCD, BACD, BCAD, BCDA, ACBD, CABD, CBAD, CBDA, ACDB, CADB, CDAB, CDBA, ABDC, BADC, BDAC, BDCA, ADBC, DABC, DBAC, DBCA, ADCB, DACB, DCAB, DCBA]
+//        permWithoutDupPrint("ABCD", 2, "");
     }
 
     public static List<String> perm(String chars, int permLen, String prefix) {
@@ -81,7 +83,7 @@ public class PermutationDup {
         if (permLen == 0) {
             // BASE CASE
             System.out.println(prefix);
-            return; // don't foget this return
+            return; // don't forget this return
         }
 
         // RECURSIVE CASE

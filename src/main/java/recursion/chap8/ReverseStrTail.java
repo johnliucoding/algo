@@ -10,7 +10,7 @@ public class ReverseStrTail {
 
     public static String reverse(String input, String accum) {
 
-        if (input.length() == 0) {
+        if (input.isEmpty()) {
             // BASE CASE
             return accum;
         } else {
