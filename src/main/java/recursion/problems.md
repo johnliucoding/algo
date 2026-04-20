@@ -21,6 +21,14 @@
 
 # chap6 permutations and combinations
 
+- all permutation without repetition
+- all permutation with repetition
+  - with nested loop with fixed length
+  - recursive
+- k-combinations
+- all combination of balanced parentheses
+- power set
+
 # chap7 memoization and dynamic programming
 
 # chap8 tail call optimization
