@@ -59,7 +59,16 @@
 # chap 13 
 
 - pattern-matching algorithms
-  - 
-- trie
-- compressed trie
-- suffix array
+  - brute force
+  - Boyer-Moore algorithms
+  - Knuth-Morris-Pratt algorithms
+- tries
+  - standard tries
+  - compressed tries
+  - suffix tries
+  - search engine indexing: inverted index
+- text compression
+  - Huffman coding
+    - greedy-choice property
+
+# chap 14
