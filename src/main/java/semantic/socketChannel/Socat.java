@@ -1,4 +1,4 @@
-package semantic.socket;
+package semantic.socketChannel;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

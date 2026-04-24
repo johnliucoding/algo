@@ -1,4 +1,4 @@
-package semantic.socket;
+package semantic.socketChannel;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
