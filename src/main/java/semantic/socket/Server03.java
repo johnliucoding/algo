@@ -4,150 +4,121 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 /**
- * @author liuxiaodong02
+ * A multithreaded chat room server. When a client connects the server requests
+ * a screen name by sending the client the text "SUBMITNAME", and keeps
+ * requesting a name until a unique one is received. After a client submits a
+ * unique name, the server acknowledges with "NAMEACCEPTED". Then all messages
+ * from that client will be broadcast to all other clients that have submitted a
+ * unique screen name. The broadcast messages are prefixed with "MESSAGE".
  *
- * Client -> Server
- *     MOVE <n>
- *     QUIT
- *
- * Server -> Client
- *
- *     WELCOME <char>
- *     VALID_MOVE
- *     OTHER_PLAYER_MOVED <n>
- *     OTHER_PLAYER_LEFT
- *     VICTORY
- *     DEFEAT
- *     TIE
- *     MESSAGE <text>
+ * This is just a teaching example so it can be enhanced in many ways, e.g.,
+ * better logging. Another is to accept a lot of fun commands, like Slack.
  */
 public class Server03 {
+    // All client names, so we can check for duplicates upon registration.
+    private static Set<String> names = new HashSet<>();
+
+    // The set of all the print writers for all the clients, used for broadcast.
+    private static Set<PrintWriter> writers = new HashSet<>();
     static void main() throws IOException {
-        try(var listener = new ServerSocket(58901)) {
-            IO.println("Tic Tac Toe server is running...");
-            try(var pool = Executors.newVirtualThreadPerTaskExecutor()) {
+        System.out.println("The chat server is running...");
+        var pool = Executors.newFixedThreadPool(500);
+        try(pool) {
+            try(var listener = new ServerSocket(59001)) {
                 while (true) {
-                    Game game = new Game();
-                    pool.execute(game.new Player(listener.accept(), 'X'));
-                    pool.execute(game.new Player(listener.accept(), 'O'));
+                    pool.execute(new Handler(listener.accept()));
                 }
             }
         }
     }
-    static class Game {
-        class Player implements Runnable {
-            final char mark;
-            Player opponent;
-            final Socket socket;
-            final Scanner input;
-            final PrintWriter output;
 
-            Player(Socket socket, char mark) throws IOException {
-                this.socket = socket;
-                this.mark = mark;
-                this.input = new Scanner(socket.getInputStream());
-                this.output = new PrintWriter(socket.getOutputStream(), true);
-            }
+    /**
+     * The client handler task.
+     */
+    private static class Handler implements Runnable {
+        private String name;
+        private Socket socket;
+        private Scanner in;
+        private PrintWriter out;
 
-            @Override
-            public void run() {
-                try(socket) {
-                    setup();
-                    processCommands();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(opponent != null && opponent.opponent != null) {
-                        opponent.output.println("OTHER_PLAYER_LEFT");
-                    }
-                    IO.println("Player " + this + " disconnected");
-                }
-            }
+        /**
+         * Constructs a handler thread, squirreling away the socket. All the interesting
+         * work is done in the run method. Remember the constructor is called from the
+         * server's main method, so this has to be as short as possible.
+         */
+        public Handler(Socket socket) {
+            this.socket = socket;
+        }
 
-            @Override
-            public String toString() {
-                return mark + "@" + socket.getRemoteSocketAddress();
-            }
+        /**
+         * Services this thread's client by repeatedly requesting a screen name until a
+         * unique one has been submitted, then acknowledges the name and registers the
+         * output stream for the client in a global set, then repeatedly gets inputs and
+         * broadcasts them.
+         */
+        public void run() {
+            try {
+                in = new Scanner(socket.getInputStream());
+                out = new PrintWriter(socket.getOutputStream(), true);
 
-            private void setup() {
-                IO.println("Player " + this + " connected");
-                IO.println("Sending welcome message to " + this);
-                output.println("WELCOME " + mark);
-                if (mark == 'X') {
-                    currentPlayer = this;
-                    output.println("MESSAGE Waiting for opponent to connect");
-                } else {
-                    opponent = currentPlayer;
-                    opponent.opponent = this;
-                    opponent.output.println("MESSAGE Your move");
-                }
-            }
-            private void processCommands() {
-                while (input.hasNextLine()) {
-                    var command = input.nextLine();
-                    IO.println("Received command from " + this + ": " + command);
-                    if (command.startsWith("QUIT")) {
-                        // No more to read from this player
+                // Keep requesting a name until we get a unique one.
+                while (true) {
+                    out.println("SUBMITNAME");
+                    name = in.nextLine();
+                    if (name == null) {
                         return;
-                    } else if (command.startsWith("MOVE")) {
-                        processMoveCommand(Integer.parseInt(command.substring(5)));
+                    }
+                    synchronized (names) {
+                        if (!name.isBlank() && !names.contains(name)) {
+                            names.add(name);
+                            break;
+                        }
                     }
                 }
-            }
 
-            private void processMoveCommand(int location) {
+                // Now that a successful name has been chosen, add the socket's print writer
+                // to the set of all writers so this client can receive broadcast messages.
+                // But BEFORE THAT, let everyone else know that the new person has joined!
+                out.println("NAMEACCEPTED " + name);
+                for (PrintWriter writer : writers) {
+                    writer.println("MESSAGE " + name + " has joined");
+                }
+                writers.add(out);
+
+                // Accept messages from this client and broadcast them.
+                while (true) {
+                    String input = in.nextLine();
+                    if (input.toLowerCase().startsWith("/quit")) {
+                        return;
+                    }
+                    for (PrintWriter writer : writers) {
+                        writer.println("MESSAGE " + name + ": " + input);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (out != null) {
+                    writers.remove(out);
+                }
+                if (name != null) {
+                    System.out.println(name + " is leaving");
+                    names.remove(name);
+                    for (PrintWriter writer : writers) {
+                        writer.println("MESSAGE " + name + " has left");
+                    }
+                }
                 try {
-                    move(location, this);
-                    output.println("VALID_MOVE");
-                    opponent.output.println("OPPONENT_MOVED " + location);
-                    if (hasWinner()) {
-                        output.println("VICTORY");
-                        opponent.output.println("DEFEAT");
-                    } else if (boardFilledUp()) {
-                        output.println("TIE");
-                        opponent.output.println("TIE");
-                    }
-                } catch (IllegalStateException e) {
-                    IO.println("Rejected move from " + this + ": " + e.getMessage());
-                    output.println("MESSAGE " + e.getMessage());
+                    socket.close();
+                } catch (IOException e) {
                 }
             }
-        }
-        // Board cells numbered 0-8, top to bottom, left to right; null if empty
-        private Player[] board = new Player[9];
-        // Whose turn it is now
-        Player currentPlayer;
-
-        public boolean hasWinner() {
-            return (board[0] != null && board[0] == board[1] && board[0] == board[2])
-                    || (board[3] != null && board[3] == board[4] && board[3] == board[5])
-                    || (board[6] != null && board[6] == board[7] && board[6] == board[8])
-                    || (board[0] != null && board[0] == board[3] && board[0] == board[6])
-                    || (board[1] != null && board[1] == board[4] && board[1] == board[7])
-                    || (board[2] != null && board[2] == board[5] && board[2] == board[8])
-                    || (board[0] != null && board[0] == board[4] && board[0] == board[8])
-                    || (board[2] != null && board[2] == board[4] && board[2] == board[6]);
-        }
-
-        public boolean boardFilledUp() {
-            return Arrays.stream(board).allMatch(p -> p != null);
-        }
-
-        public synchronized void move(int location, Player player) {
-            if (player != currentPlayer) {
-                throw new IllegalStateException("Not your turn");
-            } else if (player.opponent == null) {
-                throw new IllegalStateException("You don't have an opponent yet");
-            } else if (board[location] != null) {
-                throw new IllegalStateException("Cell already occupied");
-            }
-            board[location] = currentPlayer;
-            currentPlayer = currentPlayer.opponent;
         }
     }
 }
