@@ -24,7 +24,8 @@ public class Server02 {
             IO.println("The capitalization server is running...");
             try(var pool = Executors.newVirtualThreadPerTaskExecutor()) {
                 while(true) {
-                    pool.execute(new Capitalizer(listener.accept()));
+                    Socket connection = listener.accept();
+                    pool.execute(new Capitalizer(connection));
                 }
             }
         }
