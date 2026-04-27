@@ -13,7 +13,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * @author liuxiaodong02
- *
+ * <p>
  * copies files recursively from a source directory to a dentination directory
  */
 public class Copy {
@@ -22,6 +22,7 @@ public class Copy {
         Path source;
         Path destination;
         long count = 0L;
+
         public Replicator(Path source, Path destination) {
             this.source = source;
             this.destination = destination;
@@ -37,10 +38,10 @@ public class Copy {
                                          BasicFileAttributes attrs) {
             IO.println("Copy file: " + file);
             Path newFile = destination.resolve(source.relativize(file));
-            try{
-                Files.copy(file,newFile,COPY_ATTRIBUTES);
+            try {
+                Files.copy(file, newFile, COPY_ATTRIBUTES);
                 count++;
-            } catch (IOException ioException){
+            } catch (IOException ioException) {
                 //log it and move
             }
             return CONTINUE;

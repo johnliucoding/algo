@@ -50,7 +50,7 @@ public class ArrayStackThread implements Stack {
         final ArrayStackThread stack = new ArrayStackThread();
 
         for (int i = 0; i < 100; i++) {
-            System.out.println("----"+i+"----");
+            System.out.println("----" + i + "----");
             new Thread(() -> {
                 stack.push(4);
                 System.out.println("pushed 4");

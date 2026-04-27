@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
  * unique name, the server acknowledges with "NAMEACCEPTED". Then all messages
  * from that client will be broadcast to all other clients that have submitted a
  * unique screen name. The broadcast messages are prefixed with "MESSAGE".
- *
+ * <p>
  * This is just a teaching example so it can be enhanced in many ways, e.g.,
  * better logging. Another is to accept a lot of fun commands, like Slack.
  */
@@ -26,11 +26,12 @@ public class Server03 {
 
     // The set of all the print writers for all the clients, used for broadcast.
     private static Set<PrintWriter> writers = new HashSet<>();
+
     static void main() throws IOException {
         System.out.println("The chat server is running...");
         var pool = Executors.newFixedThreadPool(500);
-        try(pool) {
-            try(var listener = new ServerSocket(59001)) {
+        try (pool) {
+            try (var listener = new ServerSocket(59001)) {
                 while (true) {
                     pool.execute(new Handler(listener.accept()));
                 }

@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
@@ -26,7 +25,7 @@ public class SonnetTransformer {
     }
 
     public static List<List<String>> sonnets(Path path) throws IOException {
-        try(Stream<String> lines = Files.lines(path)) {
+        try (Stream<String> lines = Files.lines(path)) {
             List<String> list = lines.dropWhile(line -> !line.startsWith("I"))
                     .takeWhile(line -> !line.startsWith("*** "))
 //                    .peek(System.out::println)
@@ -97,7 +96,7 @@ public class SonnetTransformer {
             byte[] encodeSonnetsBytesArray;
             try (ByteArrayOutputStream encodedSonnets = new ByteArrayOutputStream()) {
                 for (List<String> sonnet : sonnets) {
-                    byte[] sonnetCompressedBytes =  getCompressedBytes(sonnet);
+                    byte[] sonnetCompressedBytes = getCompressedBytes(sonnet);
                     offsets.add(encodedSonnets.size());
                     lengths.add(sonnetCompressedBytes.length);
                     encodedSonnets.write(sonnetCompressedBytes);

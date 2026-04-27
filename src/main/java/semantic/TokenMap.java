@@ -20,7 +20,7 @@ public final class TokenMap {
         System.out.printf("");
     }
 
-    private final Map<Token<?>,Object> map = new HashMap<>();
+    private final Map<Token<?>, Object> map = new HashMap<>();
 
     @Override
     public String toString() {
@@ -38,5 +38,6 @@ public final class TokenMap {
         return (T) this.map.get(key);
     }
 
-    public static final class Token<T> {}
+    public static final class Token<T> {
+    }
 }

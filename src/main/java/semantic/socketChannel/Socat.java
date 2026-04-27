@@ -1,5 +1,8 @@
 package semantic.socketChannel;
 
+import jdk.net.ExtendedSocketOptions;
+import jdk.net.UnixDomainPrincipal;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.*;
@@ -10,57 +13,52 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import jdk.net.ExtendedSocketOptions;
-import jdk.net.UnixDomainPrincipal;
-
-import static java.net.StandardProtocolFamily.UNIX;
-import static java.net.StandardProtocolFamily.INET;
-import static java.net.StandardProtocolFamily.INET6;
+import static java.net.StandardProtocolFamily.*;
 
 public class Socat {
     static void usage() {
         String ustring = """
                 
-usage: java Socat -s <baddr>...
+                usage: java Socat -s <baddr>...
                 
-    java Socat -c [-bind <baddr>] <daddr> N [delay]
-
-    java Socat -h
+                    java Socat -c [-bind <baddr>] <daddr> N [delay]
                 
--s means create one or more listening servers bound to addresses <baddr>...,
-then accept all incoming connections and display (counts of) received data. If
-more than one <baddr> is supplied, then multiple channels are created, each
-bound to one of the supplied addresses. All channels are non-blocking and
-managed by one Selector.
+                    java Socat -h
                 
--c means create a client, connect it to <daddr> and send N (16 Kb) buffers. The
-client may optionally bind to a given address <baddr>. If a delay is specified,
-then the program pauses for the specified number of milliseconds between each
-send. After sending, the client reads until EOF and then exits.
+                -s means create one or more listening servers bound to addresses <baddr>...,
+                then accept all incoming connections and display (counts of) received data. If
+                more than one <baddr> is supplied, then multiple channels are created, each
+                bound to one of the supplied addresses. All channels are non-blocking and
+                managed by one Selector.
                 
-Note: AF_UNIX client sockets do not bind to an address by default. Therefore,
-the remote address seen on the server side (and the client's local address) is
-an empty path. This is slightly different from AF_INET/6 sockets, which, if the
-user does not choose a local port, then a randomly chosen one is assigned.
-
--h means print this message and exit.
-
-<baddr> and <daddr> are addresses specified as follows:
+                -c means create a client, connect it to <daddr> and send N (16 Kb) buffers. The
+                client may optionally bind to a given address <baddr>. If a delay is specified,
+                then the program pauses for the specified number of milliseconds between each
+                send. After sending, the client reads until EOF and then exits.
                 
-    UNIX:{path}
+                Note: AF_UNIX client sockets do not bind to an address by default. Therefore,
+                the remote address seen on the server side (and the client's local address) is
+                an empty path. This is slightly different from AF_INET/6 sockets, which, if the
+                user does not choose a local port, then a randomly chosen one is assigned.
                 
-    INET:{host}:port
+                -h means print this message and exit.
                 
-    INET6:{host}:port
+                <baddr> and <daddr> are addresses specified as follows:
                 
-{path} is the name of a socket file surrounded by curly brackets,
-{}, which can be empty when binding a server signifying a randomly chosen local
-address.
+                    UNIX:{path}
                 
-{host}:port is an internet address comprising a domain name or IPv4/v6 literal
-surrounded by curly brackets, {}, which can be empty when binding (signifying
-any local address) and a port number, which can be zero when binding.
-""";
+                    INET:{host}:port
+                
+                    INET6:{host}:port
+                
+                {path} is the name of a socket file surrounded by curly brackets,
+                {}, which can be empty when binding a server signifying a randomly chosen local
+                address.
+                
+                {host}:port is an internet address comprising a domain name or IPv4/v6 literal
+                surrounded by curly brackets, {}, which can be empty when binding (signifying
+                any local address) and a port number, which can be zero when binding.
+                """;
         System.out.println(ustring);
     }
 
@@ -79,6 +77,7 @@ any local address) and a port number, which can be zero when binding.
     static class AddressAndFamily {
         SocketAddress address;
         ProtocolFamily family;
+
         AddressAndFamily(ProtocolFamily family, SocketAddress address) {
             this.address = address;
             this.family = family;
@@ -122,7 +121,7 @@ any local address) and a port number, which can be zero when binding.
         }
         int cp = token.lastIndexOf(':') + 1;
         int port = Integer.parseInt(token.substring(cp));
-        var isa = new  InetSocketAddress(address, port);
+        var isa = new InetSocketAddress(address, port);
         return new AddressAndFamily(family, isa);
     }
 
@@ -172,7 +171,7 @@ any local address) and a port number, which can be zero when binding.
         try {
             parseArgs(args);
         } catch (Exception e) {
-            System.out.printf("\nInvalid arguments supplied. See the following for usage information\n");
+            System.out.print("\nInvalid arguments supplied. See the following for usage information\n");
             usage();
         }
         if (!initialized)
@@ -184,7 +183,7 @@ any local address) and a port number, which can be zero when binding.
         }
     }
 
-    static Map<SocketChannel,Integer> byteCounter = new HashMap<>();
+    static Map<SocketChannel, Integer> byteCounter = new HashMap<>();
 
     private static void initListener(AddressAndFamily aaf, Selector selector) {
         try {
@@ -213,7 +212,7 @@ any local address) and a port number, which can be zero when binding.
                 try {
                     SelectableChannel c = key.channel();
                     if (c instanceof ServerSocketChannel) {
-                        var server = (ServerSocketChannel)c;
+                        var server = (ServerSocketChannel) c;
                         var ch = server.accept();
                         var userid = "";
                         if (server.getLocalAddress() instanceof UnixDomainSocketAddress) {
@@ -229,14 +228,14 @@ any local address) and a port number, which can be zero when binding.
                         byteCounter.put(ch, 0);
                         System.out.printf("Server: new connection\n\tfrom {%s}\n", ch.getRemoteAddress());
                         System.out.printf("\tConnection id: %s\n", nextConnectionId);
-                        if (userid.length() > 0) {
+                        if (!userid.isEmpty()) {
                             System.out.printf("\tpeer credentials: %s\n", userid);
                         }
-                        System.out.printf("\tConnection count: %d\n",  byteCounter.size());
+                        System.out.printf("\tConnection count: %d\n", byteCounter.size());
                         ch.register(selector, SelectionKey.OP_READ, nextConnectionId++);
                     } else {
                         var ch = (SocketChannel) c;
-                        int id = (Integer)key.attachment();
+                        int id = (Integer) key.attachment();
                         int bytes = byteCounter.get(ch);
                         readBuf.clear();
                         int n = ch.read(readBuf);
@@ -256,21 +255,19 @@ any local address) and a port number, which can be zero when binding.
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }
-            };
+            }
             keys.clear();
         }
     }
 
     private static void postBind(SocketAddress address) {
-        if (address instanceof UnixDomainSocketAddress) {
-            var usa = (UnixDomainSocketAddress)address;
+        if (address instanceof UnixDomainSocketAddress usa) {
             usa.getPath().toFile().deleteOnExit();
         }
     }
 
     private static void display(SocketChannel ch, ByteBuffer readBuf, int id)
-            throws IOException
-    {
+            throws IOException {
         System.out.printf("Server: received %d bytes from: {%s} Id: %d\n",
                 readBuf.remaining(), ch.getRemoteAddress(), id);
     }
@@ -280,22 +277,21 @@ any local address) and a port number, which can be zero when binding.
         if (locals.isEmpty())
             client = SocketChannel.open(remote.address);
         else {
-            AddressAndFamily aaf = locals.get(0);
+            AddressAndFamily aaf = locals.getFirst();
             client = SocketChannel.open(aaf.family);
             client.bind(aaf.address);
             postBind(aaf.address);
             client.connect(remote.address);
         }
         ByteBuffer sendBuf = ByteBuffer.allocate(BUFSIZE);
-        for (int i=0; i<N; i++) {
+        for (int i = 0; i < N; i++) {
             fill(sendBuf);
             client.write(sendBuf);
             Thread.sleep(DELAY);
         }
         client.shutdownOutput();
         ByteBuffer rxb = ByteBuffer.allocate(64 * 1024);
-        int c;
-        while ((c = client.read(rxb)) > 0) {
+        while (client.read(rxb) > 0) {
             rxb.flip();
             System.out.printf("Client: received %d bytes\n", rxb.remaining());
             rxb.clear();

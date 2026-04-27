@@ -12,10 +12,10 @@ public class FileChannelOperation {
 
     public static void fileRead() {
         boolean fileOK = true;
-        try (FileChannel fchan = FileChannel.open(Path.of(""),StandardOpenOption.READ)) {
+        try (FileChannel fchan = FileChannel.open(Path.of(""), StandardOpenOption.READ)) {
             var buffy = ByteBuffer.allocateDirect(16 * 1024 * 1024);
 
-            while(fchan.read(buffy) != -1 || buffy.position() > 0 || fileOK) {
+            while (fchan.read(buffy) != -1 || buffy.position() > 0 || fileOK) {
                 fileOK = computeChecksum(buffy);
                 buffy.compact();
             }
@@ -31,7 +31,7 @@ public class FileChannelOperation {
 
     // mmap
     public static void mappedFile() throws IOException {
-        try (var fc = FileChannel.open(Path.of(""),StandardOpenOption.READ, StandardOpenOption.WRITE)) {
+        try (var fc = FileChannel.open(Path.of(""), StandardOpenOption.READ, StandardOpenOption.WRITE)) {
 
             MappedByteBuffer mbf = fc.map(FileChannel.MapMode.READ_WRITE, 0, fc.size());
             byte[] b = new byte[(int) fc.size()];

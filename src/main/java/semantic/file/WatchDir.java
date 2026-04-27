@@ -1,10 +1,12 @@
 package semantic.file;
 
+import java.io.IOException;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.Map;
+
 import static java.nio.file.StandardWatchEventKinds.*;
-import java.nio.file.attribute.*;
-import java.io.*;
-import java.util.*;
 
 /**
  * Example to watch a directory (or tree) for changes to files.
@@ -13,13 +15,13 @@ import java.util.*;
 public class WatchDir {
 
     private final WatchService watcher;
-    private final Map<WatchKey,Path> keys;
+    private final Map<WatchKey, Path> keys;
     private final boolean recursive;
     private boolean trace = false;
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
-        return (WatchEvent<T>)event;
+        return (WatchEvent<T>) event;
     }
 
     /**
@@ -49,8 +51,7 @@ public class WatchDir {
         Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                    throws IOException
-            {
+                    throws IOException {
                 register(dir);
                 return FileVisitResult.CONTINUE;
             }
@@ -62,7 +63,7 @@ public class WatchDir {
      */
     WatchDir(Path dir, boolean recursive) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
-        this.keys = new HashMap<WatchKey,Path>();
+        this.keys = new HashMap<WatchKey, Path>();
         this.recursive = recursive;
 
         if (recursive) {
@@ -81,7 +82,7 @@ public class WatchDir {
      * Process all events for keys queued to the watcher
      */
     void processEvents() {
-        for (;;) {
+        for (; ; ) {
 
             // wait for key to be signalled
             WatchKey key;
@@ -97,7 +98,7 @@ public class WatchDir {
                 continue;
             }
 
-            for (WatchEvent<?> event: key.pollEvents()) {
+            for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent.Kind kind = event.kind();
 
                 // TBD - provide example of how OVERFLOW event is handled

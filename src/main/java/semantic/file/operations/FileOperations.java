@@ -44,7 +44,7 @@ public class FileOperations {
 
     public static void countingWords() {
         var alice = Path.of("alice.txt");
-        try(Stream<String> lines = Files.lines(alice))  {
+        try (Stream<String> lines = Files.lines(alice)) {
             long count = lines.flatMap(line -> Stream.of(line.split("")))
                     .filter(word -> word.equals("a"))
                     .count();
@@ -78,7 +78,7 @@ public class FileOperations {
 
             posixFilePermissions.add(GROUP_READ);
             Files.setPosixFilePermissions(teamList, posixFilePermissions);
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
     }

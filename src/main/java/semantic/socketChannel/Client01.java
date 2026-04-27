@@ -15,7 +15,7 @@ public class Client01 {
 
     public static void main(String[] args) {
         int port = DEFAULT_PORT;
-        if(args.length > 0) {
+        if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }
         try {

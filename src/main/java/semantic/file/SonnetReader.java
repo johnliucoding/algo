@@ -1,18 +1,13 @@
 package semantic.file;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * @author liuxiaodong02
@@ -25,21 +20,21 @@ public class SonnetReader {
 
         System.out.println(path.toString());
 
-        try (InputStream in = Files.newInputStream(path,  StandardOpenOption.READ);
-        BufferedInputStream bis = new BufferedInputStream(in);
-        DataInputStream dis = new DataInputStream(bis)) {
+        try (InputStream in = Files.newInputStream(path, StandardOpenOption.READ);
+             BufferedInputStream bis = new BufferedInputStream(in);
+             DataInputStream dis = new DataInputStream(bis)) {
             int numberOfSonnets = dis.readInt();
             System.out.println("numberOfSonnets: " + numberOfSonnets);
             List<Integer> offsets = new ArrayList<>();
             List<Integer> lengths = new ArrayList<>();
-            for(int i = 0; i < numberOfSonnets; i++) {
+            for (int i = 0; i < numberOfSonnets; i++) {
                 offsets.add(dis.readInt());
                 lengths.add(dis.readInt());
             }
             bis.mark(Integer.MAX_VALUE);
 
 
-             // there is a internal position
+            // there is a internal position
             bis.reset();
             int sonnet = 75; // the sonnet you are reading
             int offset = offsets.get(sonnet - 1);

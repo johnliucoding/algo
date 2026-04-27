@@ -14,20 +14,20 @@ import java.util.Scanner;
  * Deitel and Deitel’s “Java How to Program” book from the late 1990s. For this
  * project I created a new application-level protocol called TTTP (for Tic Tac
  * Toe Protocol), which is entirely plain text. The messages of TTTP are:
- *
+ * <p>
  * Client -> Server
- *     MOVE <n>
- *     QUIT
- *
+ * MOVE <n>
+ * QUIT
+ * <p>
  * Server -> Client
- *     WELCOME <char>
- *     VALID_MOVE
- *     OTHER_PLAYER_MOVED <n>
- *     OTHER_PLAYER_LEFT
- *     VICTORY
- *     DEFEAT
- *     TIE
- *   MESSAGE <text>
+ * WELCOME <char>
+ * VALID_MOVE
+ * OTHER_PLAYER_MOVED <n>
+ * OTHER_PLAYER_LEFT
+ * VICTORY
+ * DEFEAT
+ * TIE
+ * MESSAGE <text>
  */
 public class Client04 {
     private final JFrame frame = new JFrame("Tic Tac Toe");
@@ -116,18 +116,28 @@ public class Client04 {
                     });
                 } else if (response.startsWith("MESSAGE")) {
                     var message = response.substring(8);
-                    ui(() -> {messageLabel.setText(message);});
+                    ui(() -> {
+                        messageLabel.setText(message);
+                    });
                 } else if (response.startsWith("VICTORY")) {
-                    ui(() -> {JOptionPane.showMessageDialog(frame, "Winner Winner");});
+                    ui(() -> {
+                        JOptionPane.showMessageDialog(frame, "Winner Winner");
+                    });
                     break;
                 } else if (response.startsWith("DEFEAT")) {
-                    ui(() -> {JOptionPane.showMessageDialog(frame, "Sorry you lost");});
+                    ui(() -> {
+                        JOptionPane.showMessageDialog(frame, "Sorry you lost");
+                    });
                     break;
                 } else if (response.startsWith("TIE")) {
-                    ui(() -> {JOptionPane.showMessageDialog(frame, "Tie");});
+                    ui(() -> {
+                        JOptionPane.showMessageDialog(frame, "Tie");
+                    });
                     break;
                 } else if (response.startsWith("OTHER_PLAYER_LEFT")) {
-                    ui(() -> {JOptionPane.showMessageDialog(frame, "Other player left");});
+                    ui(() -> {
+                        JOptionPane.showMessageDialog(frame, "Other player left");
+                    });
                     break;
                 }
             }

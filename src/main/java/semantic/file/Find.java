@@ -30,6 +30,7 @@ public class Find {
                 IO.println(file);
             }
         }
+
         // prints the total number of matches
         void done() {
             IO.println("Matches found: " + numMatches);
@@ -60,7 +61,7 @@ public class Find {
     }
 
     static void main(String[] args) throws IOException {
-        if(args.length < 2 || !args[1].equals("-glob")) {
+        if (args.length < 2 || !args[1].equals("-glob")) {
             usage();
         }
 

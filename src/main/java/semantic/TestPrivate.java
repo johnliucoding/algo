@@ -4,7 +4,7 @@ public class TestPrivate {
 
     static class A {
         private A() {
-            System.out.println("Subclassed A in "+getClass().getName());
+            System.out.println("Subclassed A in " + getClass().getName());
         }
     }
 

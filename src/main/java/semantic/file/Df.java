@@ -27,11 +27,11 @@ public class Df {
         System.out.format("%-20s %12s %12s %12s\n", "Filesystem", "Gbytes", "used", "avail");
         if (args.length == 0) {
             FileSystem fs = FileSystems.getDefault();
-            for (FileStore store: fs.getFileStores()) {
+            for (FileStore store : fs.getFileStores()) {
                 printFileStore(store);
             }
         } else {
-            for (String file: args) {
+            for (String file : args) {
                 FileStore store = Files.getFileStore(Paths.get(file));
                 printFileStore(store);
             }

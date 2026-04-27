@@ -1,12 +1,16 @@
 package semantic.file;
 
 
-import java.nio.file.*;
-import java.nio.file.attribute.*;
-import static java.nio.file.attribute.PosixFilePermission.*;
-import static java.nio.file.FileVisitResult.*;
 import java.io.IOException;
-import java.util.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.attribute.PosixFilePermission.*;
 
 
 /**
@@ -67,14 +71,10 @@ public class Chmod {
      * </tr>
      * </table>
      *
-     * @param   exprs
-     *          List of one or more <em>symbolic mode expressions</em>
-     *
-     * @return  A {@code Changer} that may be used to changer a set of
-     *          file permissions
-     *
-     * @throws  IllegalArgumentException
-     *          If the value of the {@code exprs} parameter is invalid
+     * @param exprs List of one or more <em>symbolic mode expressions</em>
+     * @return A {@code Changer} that may be used to changer a set of
+     * file permissions
+     * @throws IllegalArgumentException If the value of the {@code exprs} parameter is invalid
      */
     public static Changer compile(String exprs) {
         // minimum is who and operator (u= for example)
@@ -86,7 +86,7 @@ public class Chmod {
         final Set<PosixFilePermission> toRemove = new HashSet<PosixFilePermission>();
 
         // iterate over each of expression modes
-        for (String expr: exprs.split(",")) {
+        for (String expr : exprs.split(",")) {
             // minimum of who and operator
             if (expr.length() < 2)
                 throw new IllegalArgumentException("Invalid mode");
@@ -98,13 +98,24 @@ public class Chmod {
             boolean g = false;
             boolean o = false;
             boolean done = false;
-            for (;;) {
+            for (; ; ) {
                 switch (expr.charAt(pos)) {
-                    case 'u' : u = true; break;
-                    case 'g' : g = true; break;
-                    case 'o' : o = true; break;
-                    case 'a' : u = true; g = true; o = true; break;
-                    default : done = true;
+                    case 'u':
+                        u = true;
+                        break;
+                    case 'g':
+                        g = true;
+                        break;
+                    case 'o':
+                        o = true;
+                        break;
+                    case 'a':
+                        u = true;
+                        g = true;
+                        o = true;
+                        break;
+                    default:
+                        done = true;
                 }
                 if (done)
                     break;
@@ -135,11 +146,17 @@ public class Chmod {
             boolean r = false;
             boolean w = false;
             boolean x = false;
-            for (int i=0; i<mask.length(); i++) {
+            for (int i = 0; i < mask.length(); i++) {
                 switch (mask.charAt(i)) {
-                    case 'r' : r = true; break;
-                    case 'w' : w = true; break;
-                    case 'x' : x = true; break;
+                    case 'r':
+                        r = true;
+                        break;
+                    case 'w':
+                        w = true;
+                        break;
+                    case 'x':
+                        x = true;
+                        break;
                     default:
                         throw new IllegalArgumentException("Invalid mode");
                 }
@@ -226,10 +243,8 @@ public class Chmod {
         /**
          * Applies the changes to the given set of permissions.
          *
-         * @param   perms
-         *          The set of permissions to change
-         *
-         * @return  The {@code perms} parameter
+         * @param perms The set of permissions to change
+         * @return The {@code perms} parameter
          */
         Set<PosixFilePermission> change(Set<PosixFilePermission> perms);
     }

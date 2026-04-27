@@ -9,9 +9,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.Scanner;
 import java.util.Set;
-import java.util.logging.Handler;
 
 /**
  * @author liuxiaodong02
@@ -21,6 +19,7 @@ public class Server03 {
     static class Reactor implements Runnable {
         final Selector selector;
         final ServerSocketChannel serverSocketChannel;
+
         Reactor(int port) throws IOException {
             selector = Selector.open();
             serverSocketChannel = ServerSocketChannel.open();
@@ -69,6 +68,7 @@ public class Server03 {
         }
 
     }
+
     static class Handler implements Runnable {
         final SocketChannel socketChannel;
         final SelectionKey key;
@@ -77,6 +77,7 @@ public class Server03 {
         static final int READING = 0;
         static final int SENDING = 1;
         int state = READING;
+
         Handler(SocketChannel socketChannel, Selector sel) throws IOException {
             socketChannel.configureBlocking(false);
             this.socketChannel = socketChannel;
@@ -87,16 +88,23 @@ public class Server03 {
 
         }
 
-        boolean inputIsComplete() {return true;}
-        boolean outputIsComplete() {return true;}
-        void process() {}
+        boolean inputIsComplete() {
+            return true;
+        }
+
+        boolean outputIsComplete() {
+            return true;
+        }
+
+        void process() {
+        }
 
         @Override
         public void run() {
             try {
                 if (state == READING) {
                     read();
-                } else  if (state == SENDING) {
+                } else if (state == SENDING) {
                     send();
                 }
             } catch (IOException e) {
@@ -106,16 +114,17 @@ public class Server03 {
 
         void read() throws IOException {
             socketChannel.read(input);
-            if(inputIsComplete()) {
+            if (inputIsComplete()) {
                 process();
                 state = SENDING;
                 // normally also do first write now
                 key.interestOps(SelectionKey.OP_WRITE);
             }
         }
+
         void send() throws IOException {
             socketChannel.write(output);
-            if(outputIsComplete()) {
+            if (outputIsComplete()) {
                 key.cancel();
             }
         }

@@ -7,7 +7,8 @@ import java.util.function.ObjIntConsumer;
  */
 public final class Enumerate {
 
-    record Pair<T>(T element, int index) {}
+    record Pair<T>(T element, int index) {
+    }
 
     private Enumerate() {
     }

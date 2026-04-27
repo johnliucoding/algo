@@ -18,11 +18,14 @@ public class TeeExample {
         WD2, WD4
     }
 
-    sealed interface Vehicle {}
+    sealed interface Vehicle {
+    }
 
-    record Car(Color color, Engine engine, Drive drive, int passengers) implements Vehicle {}
+    record Car(Color color, Engine engine, Drive drive, int passengers) implements Vehicle {
+    }
 
-    record Truck(Engine engine, Drive drive, int weight) implements Vehicle {}
+    record Truck(Engine engine, Drive drive, int weight) implements Vehicle {
+    }
 
     static void main() {
         List<Vehicle> vehicles = List.of(
@@ -57,7 +60,7 @@ public class TeeExample {
 
 
     static boolean isElectric(Vehicle vehicle) {
-        return switch(vehicle) {
+        return switch (vehicle) {
             case Car car when car.engine() == Engine.ELECTRIC -> true;
             case Truck truck when truck.engine() == Engine.ELECTRIC -> true;
             case Car _, Truck _ -> false;

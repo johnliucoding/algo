@@ -12,7 +12,7 @@ public class Server01 {
 
     static void main(String[] args) throws IOException {
 
-        try(ServerSocketChannel ssc = ServerSocketChannel.open()) {
+        try (ServerSocketChannel ssc = ServerSocketChannel.open()) {
             ssc.bind(new InetSocketAddress("localhost", 8080));
             try (ExecutorService pool = Executors.newFixedThreadPool(1000)) {
                 while (true) {
@@ -30,7 +30,7 @@ public class Server01 {
         System.out.println("Connection from " + sc);
         // position == 0
         // limit == capacity == 1024
-        try{
+        try {
 
             ByteBuffer buf = ByteBuffer.allocateDirect(1024);
             while (sc.read(buf) != -1) {
@@ -39,13 +39,13 @@ public class Server01 {
                 // limit == 1024
                 // capacity == 1024
                 buf.flip(); // buf.limit(buf.position()).position(0)
-                for(int i = 0; i < buf.limit(); i ++) {
+                for (int i = 0; i < buf.limit(); i++) {
                     buf.put(i, (byte) transmogrify(buf.get(i)));
                 }
-                while(buf.hasRemaining()) {
+                while (buf.hasRemaining()) {
                     sc.write(buf);
                 }
-                buf.compact();
+                buf.clear();
             }
         } catch (IOException e) {
             System.err.println("Connection problem -" + e);
@@ -53,7 +53,7 @@ public class Server01 {
     }
 
     private static int transmogrify(int data) {
-        if(Character.isLetter(data)) return data ^ ' ';
+        if (Character.isLetter(data)) return data ^ ' ';
         return data;
     }
 }

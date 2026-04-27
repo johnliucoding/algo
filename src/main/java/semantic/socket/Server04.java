@@ -10,27 +10,27 @@ import java.util.concurrent.Executors;
 
 /**
  * @author liuxiaodong02
- *
+ * <p>
  * Client -> Server
- *     MOVE <n>
- *     QUIT
- *
+ * MOVE <n>
+ * QUIT
+ * <p>
  * Server -> Client
- *
- *     WELCOME <char>
- *     VALID_MOVE
- *     OTHER_PLAYER_MOVED <n>
- *     OTHER_PLAYER_LEFT
- *     VICTORY
- *     DEFEAT
- *     TIE
- *     MESSAGE <text>
+ * <p>
+ * WELCOME <char>
+ * VALID_MOVE
+ * OTHER_PLAYER_MOVED <n>
+ * OTHER_PLAYER_LEFT
+ * VICTORY
+ * DEFEAT
+ * TIE
+ * MESSAGE <text>
  */
 public class Server04 {
     static void main() throws IOException {
-        try(var listener = new ServerSocket(58901)) {
+        try (var listener = new ServerSocket(58901)) {
             IO.println("Tic Tac Toe server is running...");
-            try(var pool = Executors.newVirtualThreadPerTaskExecutor()) {
+            try (var pool = Executors.newVirtualThreadPerTaskExecutor()) {
                 while (true) {
                     Game game = new Game();
                     pool.execute(game.new Player(listener.accept(), 'X'));
@@ -39,6 +39,7 @@ public class Server04 {
             }
         }
     }
+
     static class Game {
         class Player implements Runnable {
             final char mark;
@@ -56,13 +57,13 @@ public class Server04 {
 
             @Override
             public void run() {
-                try(socket) {
+                try (socket) {
                     setup();
                     processCommands();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    if(opponent != null && opponent.opponent != null) {
+                    if (opponent != null && opponent.opponent != null) {
                         opponent.output.println("OTHER_PLAYER_LEFT");
                     }
                     IO.println("Player " + this + " disconnected");
@@ -87,6 +88,7 @@ public class Server04 {
                     opponent.output.println("MESSAGE Your move");
                 }
             }
+
             private void processCommands() {
                 while (input.hasNextLine()) {
                     var command = input.nextLine();
@@ -118,6 +120,7 @@ public class Server04 {
                 }
             }
         }
+
         // Board cells numbered 0-8, top to bottom, left to right; null if empty
         private Player[] board = new Player[9];
         // Whose turn it is now

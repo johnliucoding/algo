@@ -19,27 +19,27 @@ public class Server02 {
     private static final ConcurrentMap<SocketChannel, ByteBuffer> map = new ConcurrentHashMap<>();
 
     static void main(String[] args) throws IOException {
-        try(ServerSocketChannel ssc = ServerSocketChannel.open()) {
-            ssc.bind(new InetSocketAddress( 8080));
+        try (ServerSocketChannel ssc = ServerSocketChannel.open()) {
+            ssc.bind(new InetSocketAddress(8080));
             ssc.configureBlocking(false);
-            try(Selector selector = Selector.open()) {
+            try (Selector selector = Selector.open()) {
                 ssc.register(selector, SelectionKey.OP_ACCEPT);
-                while(true) {
+                while (true) {
                     selector.select();
                     Set<SelectionKey> keys = selector.selectedKeys();
-                    for(Iterator<SelectionKey> it = keys.iterator(); it.hasNext(); ) {
+                    for (Iterator<SelectionKey> it = keys.iterator(); it.hasNext(); ) {
                         SelectionKey key = it.next();
                         try {
-                            if(key.isValid()) {
-                                if(key.isAcceptable()) {
+                            if (key.isValid()) {
+                                if (key.isAcceptable()) {
                                     accept(key);
-                                } else if(key.isReadable()) {
+                                } else if (key.isReadable()) {
                                     read(key);
-                                } else if(key.isWritable()) {
+                                } else if (key.isWritable()) {
                                     write(key);
                                 }
                             }
-                        } catch(IOException e) {
+                        } catch (IOException e) {
                             throw new UncheckedIOException(e);
                         }
                         it.remove();
@@ -54,7 +54,7 @@ public class Server02 {
         SocketChannel sc = (SocketChannel) key.channel();
         ByteBuffer buff = map.get(sc);
         sc.write(buff);
-        if(!buff.hasRemaining()) {
+        if (!buff.hasRemaining()) {
             buff.compact();
             key.interestOps(SelectionKey.OP_READ);
         }
@@ -64,7 +64,7 @@ public class Server02 {
         SocketChannel sc = (SocketChannel) key.channel();
         ByteBuffer buff = map.get(sc);
         int data = sc.read(buff);
-        if(data == -1) {
+        if (data == -1) {
             sc.close();
             map.remove(sc);
         }
@@ -84,12 +84,13 @@ public class Server02 {
 
 
     private static void transmogrify(ByteBuffer buff) {
-        for(int i = 0; i < buff.limit(); i ++) {
+        for (int i = 0; i < buff.limit(); i++) {
             buff.put(i, (byte) transmogrify(buff.get(i)));
         }
     }
+
     private static int transmogrify(int data) {
-        if(Character.isLetter(data)) return data ^ ' ';
+        if (Character.isLetter(data)) return data ^ ' ';
         return data;
     }
 }

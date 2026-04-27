@@ -16,7 +16,7 @@ public class ConsoleLoginExample {
         char[] password = console.readPassword("Enter your password: ");
 
         char[] correctPassword = {'n', 'i', 'm', 'd', 'a'};
-        if (Arrays.equals(password,correctPassword)) {
+        if (Arrays.equals(password, correctPassword)) {
             console.printf("Thanks %s, you are logged in.\n", name);
         } else {
             console.printf("Sorry, you are denied.\n");
